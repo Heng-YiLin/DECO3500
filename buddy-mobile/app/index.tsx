@@ -1,81 +1,64 @@
-import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  ImageBackground,
-} from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Link } from "expo-router";
-import styles from "../styles/style";
+import React from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
+import styles from '../styles/index.style';
 
-const HomeScreen = () => {
+export default function EventsScreen() {
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       {/* Header */}
-      <View >
-        <Text>Hello, Bill</Text>
-        <Image
-          source={require("../assets/images/homeImg.png")} // Adjust the path to your image s
-        /> 
+      <View style={styles.header}>
+        <View >
+          <Image source={require('../assets/images/homeImg.png')} style={styles.headerImg} />
+          <Text style={styles.greeting}>Hello, Bill</Text>
+        </View>
+        <TextInput style={styles.searchBar} placeholder="Search Events" />
       </View>
-
-      {/* <View style={styles.header}>
-        <TouchableOpacity style={styles.searchContainer}>
-          <Icon name="magnify" size={20} color="#fff" />
-          <Text style={styles.searchText}>Search Events</Text>
-          <Link href="/home">About</Link>
-        </TouchableOpacity>
+      
+      {/* Nearby Buddy Section */}
+      <View style={styles.section}>
+        <View style={styles.buddyCard}>
+          <Text style={styles.sectionTitle}>Nearby Available Buddy</Text>
+          <Text>Turn on location services</Text>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Turn on Location</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.buddySection}>
-        <Text style={styles.buddyText}>Nearby Available Buddy</Text>
-        <TouchableOpacity style={styles.buddyButton}>
-          <Text style={styles.buddyButtonText}>Turn on Location</Text>
-        </TouchableOpacity>
-      </View> */}
-
+      
       {/* Upcoming Events Section */}
-      {/* <Text style={styles.sectionTitle}>Upcoming Events</Text>
-      <View style={styles.eventsSection}>
+      <Text style={styles.sectionHeader}>Upcoming Events</Text>
+      <View style={styles.eventRow}>
         <View style={styles.eventCard}>
-          <Image
-            source={{ uri: "https://example.com/event1.jpg" }}
-            style={styles.eventImage}
-          />
-          <Text style={styles.eventDetails}>Tomorrow at 09:30</Text>
-          <Text style={styles.eventTitle}>2024 EKKA</Text>
-          <Text style={styles.eventLocation}>Brisbane Showgrounds</Text>
-          <Text style={styles.eventStatus}>Sam is going</Text>
+          <Image source={require('../assets/images/ekka.png')} style={styles.eventImage} />
+          <Text>2024 EKKA</Text>
+          <Text>Brisbane Showgrounds</Text>
+          <Text>Sam is going</Text>
         </View>
-        <View style={styles.eventCard}>
-          <Image
-            source={{ uri: "https://example.com/event2.jpg" }}
-            style={styles.eventImage}
-          />
-          <Text style={styles.eventDetails}>29/09</Text>
-          <Text style={styles.eventTitle}>2024 String Orchestra</Text>
-          <Text style={styles.eventLocation}>PAC Auditorium Stage</Text>
-          <Text style={styles.eventStatus}>Sam is going</Text>
-        </View>
-      </View> */}
 
-      {/* Buddy Updates Section */}
-      {/* <Text style={styles.sectionTitle}>Buddy Updates</Text>
-      <View style={styles.buddyUpdateCard}>
-        <Text style={styles.buddyUpdateText}>Sam is going to book week</Text>
+        <View style={styles.eventCard}>
+          <Image source={require('../assets/images/orchestra.png')} style={styles.eventImage} />
+          <Text>2024 String Orchestra</Text>
+          <Text>PAC Auditorium Stage</Text>
+        </View>
       </View>
-      <View style={styles.buddyUpdateCard}>
-        <Text style={styles.buddyUpdateText}>
-          Sam and you are going to the EKKA
-        </Text>
-        <TouchableOpacity style={styles.detailsButton}>
-          <Text style={styles.detailsButtonText}>View Details</Text>
-        </TouchableOpacity>
-      </View> */}
+      
+      {/* Buddy Updates Section */}
+      <Text style={styles.sectionHeader}>Buddy Updates</Text>
+      <View style={styles.buddyUpdates}>
+        <View style={styles.buddyCard}>
+          <Text>Sam is going to book week</Text>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>RSVP</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.buddyCard}>
+          <Text>Sam and you are going to the EKKA</Text>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>View Details</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </ScrollView>
   );
-};
-
-export default HomeScreen;
+}
