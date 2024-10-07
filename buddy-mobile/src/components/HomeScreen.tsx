@@ -9,11 +9,11 @@ import {
   StyleSheet,
 } from "react-native";
 import styles from "./homeScreen.style";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Ionicons } from "@expo/vector-icons";
 
 function HomeScreen() {
   return (
-    <ScrollView>
+    <ScrollView  showsVerticalScrollIndicator={false} >
       {/* Header */}
       <View style={styles.header}>
         <View>
@@ -23,13 +23,25 @@ function HomeScreen() {
           />
           <Text style={styles.greeting}>Hello, Bill</Text>
         </View>
-        <TextInput style={styles.searchBar} placeholder="Search Events" />
+        <View style={styles.searchBarContainer}>
+          <Ionicons
+            name="search"
+            size={20}
+            color="gray"
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchBar}
+            placeholder="Search Events"
+            placeholderTextColor="gray"
+          />
+        </View>
       </View>
 
-      <View style ={styles.homeBody}>
+      <View style={styles.homeBody}>
         {/* Nearby Buddy Section */}
         <View style={styles.section}>
-          <View style={styles.buddyCard}>
+          <View style={styles.card}>
             <Text style={styles.sectionTitle}>Nearby Available Buddy</Text>
             <Text>Turn on location services</Text>
             <TouchableOpacity style={styles.button}>
@@ -37,48 +49,46 @@ function HomeScreen() {
             </TouchableOpacity>
           </View>
         </View>
-          {/* Upcoming Events Section */}
-      <Text style={styles.sectionHeader}>Upcoming Events</Text>
-      <View style={styles.eventRow}>
-        <View style={styles.eventCard}>
-          <Image
-            source={require("../assets/images/ekka.png")}
-            style={styles.eventImage}
-          />
-          <Text>2024 EKKA</Text>
-          <Text>Brisbane Showgrounds</Text>
+        {/* Upcoming Events Section */}
+        <Text style={styles.sectionHeader}>Upcoming Events</Text>
+        <View style={styles.eventRow}>
+          <View style={styles.eventCard}>
+            <Image
+              source={require("../assets/images/orchestra.png")}
+              style={styles.eventImage}
+            />
+            <Text>2024 EKKA</Text>
+            <Text>Brisbane Showgrounds</Text>
+          </View>
+
+          <View style={styles.eventCard}>
+            <Image
+              source={require("../assets/images/ekka.png")}
+              style={styles.eventImage}
+            />
+            <Text>2024 String Orchestra</Text>
+            <Text>PAC Auditorium Stage</Text>
+          </View>
         </View>
 
-        <View style={styles.eventCard}>
-          <Image
-            source={require("../assets/images/orchestra.png")}
-            style={styles.eventImage}
-          />
-          <Text>2024 String Orchestra</Text>
-          <Text>PAC Auditorium Stage</Text>
+        {/* Buddy Updates Section */}
+        <Text style={styles.sectionHeader}>Buddy Updates</Text>
+        <View style={styles.buddyUpdates}>
+          <View style={styles.card}>
+            <Text>Sam is going to book week</Text>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>RSVP</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.card}>
+            <Text>Sam and you are going to the EKKA</Text>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>View Details</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-
-      {/* Buddy Updates Section */}
-      <Text style={styles.sectionHeader}>Buddy Updates</Text>
-      <View style={styles.buddyUpdates}>
-        <View style={styles.buddyCard}>
-          <Text>Sam is going to book week</Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>RSVP</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.buddyCard}>
-          <Text>Sam and you are going to the EKKA</Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>View Details</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      </View>
-
-    
     </ScrollView>
   );
 }

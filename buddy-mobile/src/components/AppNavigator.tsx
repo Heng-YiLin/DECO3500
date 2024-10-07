@@ -24,7 +24,7 @@ export default function AppNavigator() {
           } else if (route.name === "Calendar") {
             iconName = focused ? "calendar" : "calendar-outline";
           } else if (route.name === "Form") {
-            iconName = focused ? "clipboard" : "clipboard-outline";
+            iconName = focused ? "chatbox-outline" : "chatbox-outline";
           } else if (route.name === "Buddy") {
             iconName = focused ? "people" : "people-outline";
           }
