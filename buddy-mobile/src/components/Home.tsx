@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
-import styles from '../../styles/index.style';
+import styles from './home.style';
 
 export default function EventsScreen() {
   return (
@@ -8,7 +8,7 @@ export default function EventsScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View >
-        <Image source={require('../assets/images/homeImg.png')}  />
+        <Image source={require('../assets/images/homeImg.png')} style={styles.headerImg} />
         <Text style={styles.greeting}>Hello, Bill</Text>
         </View>
         <TextInput style={styles.searchBar} placeholder="Search Events" />

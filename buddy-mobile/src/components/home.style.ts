@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         width:"100%",
       },
     greeting: {
-        color:"white",
+      color:"white",
       fontSize: 28,
       fontWeight: 'bold',
       marginBottom: 10,
@@ -25,6 +25,10 @@ const styles = StyleSheet.create({
       backgroundColor: '#f0f0f0',
       padding: 10,
       borderRadius: 10,
+      alignSelf:"center",
+      top:"80%",
+      width:"90%",
+      position:"absolute",
     },
     section: {
       marginBottom: 20,
