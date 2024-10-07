@@ -8,7 +8,7 @@ export default function EventsScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View >
-          <Image source={require('../assets/images/homeImg.png')} style={styles.headerImg} />
+          {/* <Image source={require('../assets/images/homeImg.png')} style={styles.headerImg} /> */}
           <Text style={styles.greeting}>Hello, Bill</Text>
         </View>
         <TextInput style={styles.searchBar} placeholder="Search Events" />
@@ -29,14 +29,14 @@ export default function EventsScreen() {
       <Text style={styles.sectionHeader}>Upcoming Events</Text>
       <View style={styles.eventRow}>
         <View style={styles.eventCard}>
-          <Image source={require('../assets/images/ekka.png')} style={styles.eventImage} />
+          {/* <Image source={require('../assets/images/ekka.png')} style={styles.eventImage} /> */}
           <Text>2024 EKKA</Text>
           <Text>Brisbane Showgrounds</Text>
           <Text>Sam is going</Text>
         </View>
 
         <View style={styles.eventCard}>
-          <Image source={require('../assets/images/orchestra.png')} style={styles.eventImage} />
+          {/* <Image source={require('../assets/images/orchestra.png')} style={styles.eventImage} /> */}
           <Text>2024 String Orchestra</Text>
           <Text>PAC Auditorium Stage</Text>
         </View>
