@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 function CalendarScreen() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Form Screen</Text>
+        <Text>cal Screen</Text>
       </View>
     );
   }

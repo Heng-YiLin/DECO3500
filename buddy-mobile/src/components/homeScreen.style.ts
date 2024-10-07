@@ -7,28 +7,32 @@ const styles = StyleSheet.create({
       padding: 16,
     },
     header: {
-      marginBottom: 20,
+      marginBottom: -30,
     },
     headerImg: {
         width:"100%",
       },
     greeting: {
       color:"white",
-      fontSize: 28,
-      fontWeight: 'bold',
-      marginBottom: 10,
+      fontSize: 40,
       position:"absolute",
       alignSelf:"center",
-      top: "50%"
+      top: "35%",
     },
     searchBar: {
       backgroundColor: '#f0f0f0',
       padding: 10,
-      borderRadius: 10,
+      borderRadius: 30,
+      height:50,
       alignSelf:"center",
-      top:"80%",
-      width:"90%",
+      top:"65%",
+      width:"85%",
       position:"absolute",
+    },
+    homeBody: {
+      borderRadius: 30,
+      padding:25,
+      backgroundColor:"white",
     },
     section: {
       marginBottom: 20,
