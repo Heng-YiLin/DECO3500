@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./HomeScreen"; // Import your main component
-import Profile from "./ProfileScreen"; // Import your main component
-import Form from "./FormScreen"; // Import your main component
-import Buddy from "./BuddyScreen"; // Import your main component
-import Calendar from "./CalendarScreen"; // Import your main component
+import { createStackNavigator } from "@react-navigation/stack";
+import Home from "./HomeScreen";
+import Profile from "./ProfileScreen";
+import Form from "./FormScreen";
+import Buddy from "./BuddyScreen";
+import Calendar from "./CalendarScreen";
 import { Text } from "react-native";
-
-import { Ionicons } from "@expo/vector-icons"; // If using Expo for icons
+import { NavigationContainer } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import SignInScreen from "./SignInScreen";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function AppNavigator() {
+// Create a Tab Navigator for the main app
+function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -30,19 +34,19 @@ export default function AppNavigator() {
             iconName = focused ? "people" : "people-outline";
           }
 
-          // Return the icon component from Ionicons
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-
         tabBarLabel: ({ focused }) => {
           return focused ? (
-            <Text style={{ color: "#E48022", fontSize: 10 }}>{route.name}</Text>
-          ) : null; // Only show the label when focused
+            <Text style={{ color: "#E48022", fontSize: 10 }}>
+              {route.name}
+            </Text>
+          ) : null;
         },
-        tabBarActiveTintColor: "#E48022", // Customize active tab color
-        tabBarInactiveTintColor: "black", // Customize inactive tab color
-        headerShown: false, // Hide the header
-        tabBarStyle: { padding: 10,backgroundColor:'#F5F5F5'},
+        tabBarActiveTintColor: "#E48022",
+        tabBarInactiveTintColor: "black",
+        headerShown: false,
+        tabBarStyle: { padding: 10, backgroundColor: "#F5F5F5" },
       })}
     >
       <Tab.Screen name="Home" component={Home} />
@@ -51,5 +55,38 @@ export default function AppNavigator() {
       <Tab.Screen name="Form" component={Form} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
+  );
+}
+
+export default function AppNavigator() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const loggedIn = false; // Change this with your actual login status
+      setIsLoggedIn(loggedIn);
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* Show Login screen if not logged in */}
+          <Stack.Screen
+            name="Login"
+            component={SignInScreen}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="MainTabs"
+            component={MainTabs}
+            options={{ headerShown: false }}
+          />
+
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

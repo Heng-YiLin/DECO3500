@@ -8,9 +8,7 @@ import AppNavigator from "./src/components/AppNavigator"; // Make sure the path 
 const App = () => {
   return (
     <PaperProvider>
-      <NavigationContainer>
         <AppNavigator />
-      </NavigationContainer>
     </PaperProvider>
   );
 };
