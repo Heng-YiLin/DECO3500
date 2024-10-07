@@ -1,15 +1,16 @@
 // App.js
-import * as React from 'react';
-import { Provider as PaperProvider } from 'react-native-paper';
-import { SafeAreaView } from 'react-native';
-import Home from './src/components/Home'; // Import your main component
+import * as React from "react";
+import { Provider as PaperProvider } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AppNavigator from "./src/components/AppNavigator"; // Make sure the path is correct
 
 const App = () => {
   return (
     <PaperProvider>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Home />
-      </SafeAreaView>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
     </PaperProvider>
   );
 };

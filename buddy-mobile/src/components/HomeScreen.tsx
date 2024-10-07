@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
-import styles from './home.style';
+import styles from './homeScreen.style';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function EventsScreen() {
+
+function HomeScreen() {
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView>
       {/* Header */}
       <View style={styles.header}>
         <View >
@@ -61,3 +63,5 @@ export default function EventsScreen() {
     </ScrollView>
   );
 }
+
+export default HomeScreen;
