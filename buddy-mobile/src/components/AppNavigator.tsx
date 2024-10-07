@@ -5,6 +5,7 @@ import Profile from "./ProfileScreen"; // Import your main component
 import Form from "./FormScreen"; // Import your main component
 import Buddy from "./BuddyScreen"; // Import your main component
 import Calendar from "./CalendarScreen"; // Import your main component
+import { Text } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons"; // If using Expo for icons
 
@@ -32,9 +33,16 @@ export default function AppNavigator() {
           // Return the icon component from Ionicons
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#ff8c8c", // Customize active tab color
-        tabBarInactiveTintColor: "gray", // Customize inactive tab color
+
+        tabBarLabel: ({ focused }) => {
+          return focused ? (
+            <Text style={{ color: "#E48022", fontSize: 10 }}>{route.name}</Text>
+          ) : null; // Only show the label when focused
+        },
+        tabBarActiveTintColor: "#E48022", // Customize active tab color
+        tabBarInactiveTintColor: "black", // Customize inactive tab color
         headerShown: false, // Hide the header
+        tabBarStyle: { padding: 10,backgroundColor:'#F5F5F5'},
       })}
     >
       <Tab.Screen name="Home" component={Home} />

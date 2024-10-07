@@ -38,9 +38,18 @@ const BuddyScreen = () => {
   const nearby = ["Lucy"];
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <Text style={styles.header}>Buddies</Text>
       <View style={styles.bodyContainer}>
+      <View style={styles.card}>
+            <View>
+            <Text style={[styles.sectionTitle, { padding: 5 }]}>Nearby Avaliable Buddy</Text>
+            <Text style={[styles.sectionTitle, { padding:5, paddingBottom: 20 }]}>Turn on location services</Text>
+            <Button buttonColor="#407FDC" textColor = "#FFFFFF" mode="elevated"  labelStyle={{ fontWeight: 'bold' }} onPress={() => console.log("location button")}>
+                Turn on Location
+            </Button>
+          </View>
+      </View>
         <ProfileSection title="Your Buddies" profiles={buddies} />
         <ProfileSection title="Requests" profiles={requests} />
         <ProfileSection

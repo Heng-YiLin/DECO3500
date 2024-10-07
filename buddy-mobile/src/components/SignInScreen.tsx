@@ -6,12 +6,11 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  StyleSheet,
 } from "react-native";
 import styles from "./homeScreen.style";
 import { Ionicons } from "@expo/vector-icons";
 
-function HomeScreen() {
+function SignInScreen() {
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} >
       {/* Header */}
@@ -93,4 +92,4 @@ function HomeScreen() {
   );
 }
 
-export default HomeScreen;
+export default SignInScreen;

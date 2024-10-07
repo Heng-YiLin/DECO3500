@@ -1,6 +1,9 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+    scrollView: {
+        backgroundColor: 'white', // Set the background color to white
+      },
     safeArea: {
         flex: 1,
         backgroundColor: '#F4F4F4',
@@ -12,10 +15,11 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     flex: 1,
-    backgroundColor: "#F4F4F4",
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 25,
-    paddingTop:60,
-    borderRadius: 30,
+    paddingTop:30,
+    borderTopLeftRadius: 30,    // Apply radius to the top-left corner
+    borderTopRightRadius: 30, 
   },
   header: {
     fontSize: 40,
