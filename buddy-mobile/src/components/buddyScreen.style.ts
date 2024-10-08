@@ -31,33 +31,27 @@ const styles = StyleSheet.create({
     width:"100%",
     backgroundColor:"#C9C9C9",
     marginBottom: -30,
-  },
-  section: {
+  },section: {
     marginBottom: 20,
   },
   sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
+    paddingVertical: 10,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: 'bold',
+  },
+  profiles: {
+    paddingVertical: 10,
+    alignItems: 'center', // Center the items in the carousel
   },
   iconContainer: {
     alignItems: 'center',
+    marginHorizontal: 10, // Space between items
   },
   profileName: {
     marginTop: 5,
-    fontSize: 14,
-    color: '#333',
-  },
-  profiles: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
+    textAlign: 'center',
   },
   avatar: {
     backgroundColor: "#ECECEC",
@@ -84,6 +78,7 @@ const styles = StyleSheet.create({
     // Android Elevation
     elevation: 5, // Elevation for Android (higher value means more elevation)
   },
+  
 });
 
 export default styles;

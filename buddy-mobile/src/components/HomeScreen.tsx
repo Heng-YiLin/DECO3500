@@ -7,13 +7,40 @@ import {
   Image,
   ScrollView,
   StyleSheet,
+  FlatList,
 } from "react-native";
 import styles from "./homeScreen.style";
 import { Ionicons } from "@expo/vector-icons";
 
 function HomeScreen() {
+  const events = [
+    {
+      id: 1,
+      title: "2024 EKKA",
+      location: "Brisbane Showgrounds",
+      image: require("../assets/images/orchestra.png"),
+    },
+    {
+      id: 2,
+      title: "2024 String Orchestra",
+      location: "PAC Auditorium Stage",
+      image: require("../assets/images/ekka.png"),
+    },
+    // Add more events as needed
+  ];
+
+  const renderEvent = ({ item }) => (
+    <View style={styles.eventCard}>
+      <Image source={item.image} style={styles.eventImage} />
+      <View style={styles.bottomEventCard}>
+        <Text style={styles.sectionTitle}>{item.title}</Text>
+        <Text>{item.location}</Text>
+      </View>
+    </View>
+  );
+
   return (
-    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} >
+    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.header}>
         <View>
@@ -51,38 +78,34 @@ function HomeScreen() {
         </View>
         {/* Upcoming Events Section */}
         <Text style={styles.sectionHeader}>Upcoming Events</Text>
-        <View style={styles.eventRow}>
-          <View style={styles.eventCard}>
-            <Image
-              source={require("../assets/images/orchestra.png")}
-              style={styles.eventImage}
-            />
-            <Text>2024 EKKA</Text>
-            <Text>Brisbane Showgrounds</Text>
-          </View>
-
-          <View style={styles.eventCard}>
-            <Image
-              source={require("../assets/images/ekka.png")}
-              style={styles.eventImage}
-            />
-            <Text>2024 String Orchestra</Text>
-            <Text>PAC Auditorium Stage</Text>
-          </View>
+ </View>
+ <View style={styles.carouselContainer}>
+          <FlatList
+            data={events}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id}
+            renderItem={renderEvent}
+          />
         </View>
+ <View style={styles.homeBody}>
 
         {/* Buddy Updates Section */}
         <Text style={styles.sectionHeader}>Buddy Updates</Text>
         <View style={styles.buddyUpdates}>
           <View style={styles.card}>
-            <Text>Sam is going to book week</Text>
+            <Text style={{ fontWeight: "bold" }}>
+              Sam is going to book week
+            </Text>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>RSVP</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.card}>
-            <Text>Sam and you are going to the EKKA</Text>
+            <Text style={{ fontWeight: "bold" }}>
+              Sam and you are going to the EKKA
+            </Text>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>View Details</Text>
             </TouchableOpacity>
