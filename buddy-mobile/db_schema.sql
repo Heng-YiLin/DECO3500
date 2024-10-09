@@ -26,7 +26,7 @@ CREATE TABLE deco.events (
     end_time TIME,
     description VARCHAR(255),
     agenda TEXT,  -- Longer event agenda if needed
-    category_id INTEGER REFERENCES deco.event_categories(id) ON DELETE SET NULL,  -- References event categories, set to NULL on delete
+    category_id INTEGER,  -- References event categories, set to NULL on delete
     accessibility_group_id INTEGER  -- Can reference a future table for accessibility groups
 );
 
@@ -60,10 +60,14 @@ CREATE TABLE deco.forum_post_categories (
     category_name VARCHAR(255) NOT NULL  -- Category for the post
 );
 
--- Grant permissions to a role (assuming role is named 'app_user')
--- Replace 'app_user' with your actual role/user
-GRANT USAGE ON SCHEMA deco TO app_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA deco TO app_user;
+
+create role authenticator noinherit login password 'password';
+create role student nologin;
+grant student to authenticator;
+
+-- Grant permissions to a student
+GRANT USAGE ON SCHEMA deco TO student;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA deco TO student;
 
 -- Automatically give permissions on new tables that are created in the future
-ALTER DEFAULT PRIVILEGES IN SCHEMA deco GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO app_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA deco GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO student;
