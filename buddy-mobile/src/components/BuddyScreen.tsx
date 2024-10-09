@@ -35,7 +35,6 @@ const ProfileSection = ({ title, profiles }) => (
   </View>
 );
 const BuddyScreen = () => {
-  
   const buddies = ["Sam"];
   const requests = ["Polly"];
   const sameCulturalBackground = ["Nisha", "Tony", "Henry", "Lonni"];
