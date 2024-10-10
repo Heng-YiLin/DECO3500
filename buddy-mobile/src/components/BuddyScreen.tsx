@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Ionicons } from "@expo/vector-icons"; // If using Expo for icons
-import styles from "./buddyScreen.style";
+import styles from "../styles/buddyScreen.style";
 import { Button } from "react-native-paper";
 
 import {

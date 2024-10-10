@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { CommonActions } from "@react-navigation/native";
-import styles from "./signinScreen.style";
+import styles from "../styles/signinScreen.style";
 
 export default function SignInScreen({ navigation }) {
   const [email, setEmail] = useState("");

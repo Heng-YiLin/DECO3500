@@ -5,10 +5,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AppNavigator from "./src/components/AppNavigator"; // Make sure the path is correct
 
+
 const App = () => {
   return (
     <PaperProvider>
-        <AppNavigator />
+      <AppNavigator />
     </PaperProvider>
   );
 };

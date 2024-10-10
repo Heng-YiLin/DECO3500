@@ -9,34 +9,40 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
-import styles from "./homeScreen.style";
+import styles from "../styles/homeScreen.style";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from '@react-navigation/native';
 
 function HomeScreen() {
+  const navigation = useNavigation();
+
   const events = [
     {
       id: 1,
-      title: "2024 EKKA",
+      title: "Book fair",
       location: "Brisbane Showgrounds",
-      image: require("../assets/images/orchestra.png"),
+      image: require("../assets/images/bookfair.png"),
     },
     {
       id: 2,
-      title: "2024 String Orchestra",
+      title: "Orchestra",
       location: "PAC Auditorium Stage",
-      image: require("../assets/images/ekka.png"),
+      image: require("../assets/images/orchestra.png"),
     },
     // Add more events as needed
   ];
 
   const renderEvent = ({ item }) => (
-    <View style={styles.eventCard}>
+    <TouchableOpacity
+      style={styles.eventCard}
+      onPress={() => navigation.navigate('EventScreen', { eventId: item.id })}
+    >
       <Image source={item.image} style={styles.eventImage} />
       <View style={styles.bottomEventCard}>
         <Text style={styles.sectionTitle}>{item.title}</Text>
         <Text>{item.location}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

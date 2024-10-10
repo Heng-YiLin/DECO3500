@@ -10,6 +10,8 @@ import { Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import SignInScreen from "./SignInScreen";
+import EventScreen from './EventScreen'; // Your EventScreen component
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -55,6 +57,7 @@ function MainTabs() {
       <Tab.Screen name="Form" component={Form} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
+    
   );
 }
 
@@ -85,7 +88,12 @@ export default function AppNavigator() {
             component={MainTabs}
             options={{ headerShown: false }}
           />
-
+          <Stack.Screen
+          name="EventScreen"
+          component={EventScreen}
+          options={{ title: 'Event Details', headerShown: false  }} // Optionally add a title
+        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
