@@ -110,7 +110,7 @@ function HomeScreen() {
 
           <View style={styles.card}>
             <Text style={{ fontWeight: "bold" }}>
-              Sam and you are going to the EKKA
+              Sam and you are going to the Orchestra
             </Text>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>View Details</Text>

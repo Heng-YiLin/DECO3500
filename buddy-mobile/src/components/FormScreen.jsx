@@ -3,8 +3,11 @@ import { Ionicons } from "@expo/vector-icons"; // If using Expo for icons
 import styles from "../styles/formScreen.style";
 import { Button } from "react-native-paper";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 const ForumScreen = () => {
+  const navigation = useNavigation();
+
   const forums = [
     {
       id: 1,
@@ -34,7 +37,7 @@ const ForumScreen = () => {
 
   // Render each forum item
   const renderForumItem = ({ item }) => (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card}   onPress={() => navigation.navigate('Forum', { id: item.id })}>
       <Text style={styles.sectionTitle}>{item.title}</Text>
       <Text style={styles.forumTime}>{item.time}</Text>
       <Text style={styles.forumResponses}>{item.responseCount}</Text>

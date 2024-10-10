@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import SignInScreen from "./SignInScreen";
 import EventScreen from './EventScreen'; // Your EventScreen component
+import Forum from './Forum'; 
 
 
 const Tab = createBottomTabNavigator();
@@ -92,6 +93,11 @@ export default function AppNavigator() {
           name="EventScreen"
           component={EventScreen}
           options={{ title: 'Event Details', headerShown: false  }} // Optionally add a title
+        />
+         <Stack.Screen
+          name="Forum"
+          component={Forum}
+          options={{ title: 'Forum', headerShown: false  }} // Optionally add a title
         />
         
       </Stack.Navigator>
