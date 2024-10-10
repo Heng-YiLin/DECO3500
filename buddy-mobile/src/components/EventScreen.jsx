@@ -1,5 +1,13 @@
 import * as React from "react";
-import { View, Text, Image, FlatList, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import styles from "../styles/eventScreen.style"; // Assuming you have your styles defined here
 
@@ -12,6 +20,8 @@ const events = [
     imageUrl: require("../assets/images/orchestra.png"), // Using require for local images
     description:
       "libero inceptos habitasse ex. Augue mauris sapien porta cubilia pharetra facilisi posuere dictum. Placera Mollis Erat Liberos tibus",
+    agenda:
+      "1. Placerat \n2. mollis \n3. erat \n4. libero \n5. penatibus ",
   },
   {
     id: 1,
@@ -21,6 +31,8 @@ const events = [
     imageUrl: require("../assets/images/bookfair.png"), // Using require for local images
     description:
       "Mauris inceptos hac habitasse arcu elementum vestibulum. Pharetra facilisi vehicula amet justo. Consectetur  Cursus Phasellus Risus Varius",
+    agenda:
+    "1. Placerat \n2. mollis \n3. erat \n4. libero \n5. penatibus ",
   },
 ];
 
@@ -45,23 +57,39 @@ function EventScreen() {
         <Text style={styles.date}>
           {event.date} | {event.time}
         </Text>
-        <Text style={styles.description}>{event.description}</Text>
-        <Text style={styles.agendaTitle}>Event Agenda</Text>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.agendaTitle}>Event Description</Text>
+          <Text style={styles.description}>{event.description}</Text>
+          <Text style={styles.agendaTitle}>Event Agenda</Text>
+          <Text style={styles.description}>{event.agenda}</Text>
+        </View>
       </View>
       <View style={styles.bodyBottom}>
         <View style={styles.buttonContainer}>
-          <Button
-            title="View Group Chat"
-            onPress={() => {
-              // Handle group chat navigation
+          <TouchableOpacity
+            style={{
+              backgroundColor: "white", // Set background color to white
+              padding: 10,
+              borderRadius: 5,
             }}
-          />
-          <Button style={styles.button}
-            title="RSVP Now"
-            onPress={() => {
-              // Handle RSVP functionality
-            }}
-          />
+          >
+            <Text
+              style={{
+                color: "orange", // Set text color to orange
+                textAlign: "center",
+                fontSize: 20,
+                fontWeight: "bold",
+                textDecorationLine: "underline",
+              }}
+              s
+            >
+              View Group Chat
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.button, { width: 150 }]}>
+            <Text style={styles.buttonText}>RSVP Now</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

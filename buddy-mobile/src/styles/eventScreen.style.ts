@@ -6,24 +6,24 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
   },
-  body:{
+  body: {
     borderTopLeftRadius: 30, // Apply radius to the top-left corner
     borderTopRightRadius: 30,
     padding: 25,
     backgroundColor: "white",
     width: "100%",
-    
   },
   bodyBottom: {
     flexGrow: 1, // Allows the body to grow and take remaining space
-    justifyContent: "flex-end",    // Center horizontally
-    paddingBottom:20,
+    paddingBottom: 20,
+    justifyContent: "flex-end",   
+    padding: 25,
+
   },
   image: {
     width: "100%",
     height: 300,
     marginBottom: -30,
-    
   },
   title: {
     fontSize: 24,
@@ -38,7 +38,11 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginBottom: 16,
-    textAlign: "center",
+  },
+  descriptionContainer:{
+    paddingTop:20,
+    borderTopWidth: 1, // Set the border width
+    borderTopColor: 'gray', // Set the border color
   },
   agendaTitle: {
     fontSize: 18,
@@ -54,6 +58,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 16,
     width: "100%",
+    paddingVertical:20,
+    borderTopWidth: 1, // Set the border width
+    borderTopColor: 'gray', // Set the border color
   },
   button: {
     backgroundColor: "#407FDC",
@@ -70,6 +77,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84, // Shadow blur radius
     // Android Elevation
     elevation: 5,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 
