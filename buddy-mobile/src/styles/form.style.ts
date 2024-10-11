@@ -101,6 +101,21 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     marginBottom: 10, // Space below the button
   },
+  inputCard:{
+    backgroundColor: "#FFFFFF",
+    padding: 15,
+    borderRadius: 20,
+    marginBottom: 20,
+    shadowColor: "#000", // Shadow color
+    shadowOffset: {
+      width: 1, // Horizontal shadow offset
+      height: 4, // Vertical shadow offset
+    },
+    shadowOpacity: 0.25, // Shadow transparency
+    shadowRadius: 3.84, // Shadow blur radius
+    // Android Elevation
+    elevation: 5, // Elevation for Android (higher value means more elevation)
+  },
 });
 
 export default styles;

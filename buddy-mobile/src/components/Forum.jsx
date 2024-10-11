@@ -158,8 +158,8 @@ function Forum() {
       return (
         <View style={styles.inputCard}>
           <TextInput
-            style={styles.input}
-            placeholder="Add your reply..."
+              style={[styles.input, { borderBottomWidth: 1, borderBottomColor: 'gray',padding:10,fontSize:16 }]}
+            placeholder="Message..."
             value={newReply}
             onChangeText={(text) => setNewReply(text)}
           />
