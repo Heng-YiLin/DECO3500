@@ -72,21 +72,21 @@ function Forum() {
   const handleAddReply = () => {
     if (newReply.trim() !== "") {
       const newReplyObj = {
-        id: replies.length + 1, // Generate new reply ID
-        user: "You", // Replace 'title' with 'user', using "You" as a placeholder for the logged-in user
+        id: replies.length + 1, 
+        user: "You", 
         content: newReply,
       };
       setReplies([...replies, newReplyObj]);
-      setNewReply(""); // Reset input field after submission
+      setNewReply(""); 
     }
   };
 
   // Combine the forum content and replies into a single data structure
   const data = [
-    { type: "forum", forum }, // Forum details section
-    { type: "repliesCount", count: replies.length }, // Replies count section
-    ...replies.map((reply) => ({ type: "reply", ...reply })), // Replies section
-    { type: "input" }, // Input card for adding a new reply
+    { type: "forum", forum }, 
+    { type: "repliesCount", count: replies.length }, 
+    ...replies.map((reply) => ({ type: "reply", ...reply })), 
+    { type: "input" }, 
   ];
 
   // Render function for each item
