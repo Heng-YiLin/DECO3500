@@ -73,10 +73,6 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center items vertically
     justifyContent: 'space-between', 
   },
-  calendarContainer: {
-    flex: 1,
-    padding: 20,
-  },
   calendarHeader: {
     flexDirection: "row",
     justifyContent: "space-between",

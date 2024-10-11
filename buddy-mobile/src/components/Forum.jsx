@@ -12,6 +12,7 @@ import styles from "../styles/form.style";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
 
+
 const forums = [
   {
     id: 2,

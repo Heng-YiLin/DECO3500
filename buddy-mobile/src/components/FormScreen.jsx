@@ -74,7 +74,9 @@ const ForumScreen = () => {
           showsVerticalScrollIndicator={false} // Disable the vertical scroll indicator
         />
       </View>
+      
     </View>
+    
   );
 };
 

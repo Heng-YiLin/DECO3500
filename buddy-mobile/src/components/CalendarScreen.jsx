@@ -3,18 +3,18 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation
+import { useNavigation } from "@react-navigation/native";
+import { CalendarProvider, WeekCalendar } from "react-native-calendars"; // Import from react-native-calendars
 import styles from "../styles/calendarScreen.style";
-import Ionicons from "react-native-vector-icons/Ionicons"; // Import Ionicons
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const CalendarScreen = () => {
-  const navigation = useNavigation(); // Initialize useNavigation hook
-  const [events, setEvents] = useState([
+  const navigation = useNavigation();
+  const [events] = useState([
     {
       id: 1,
       title: "Book Fair",
@@ -30,43 +30,6 @@ const CalendarScreen = () => {
       image: require("../assets/images/orchestra.png"),
     },
   ]);
-
-  const [selectedDate, setSelectedDate] = useState(null);
-
-  const handleDateSelection = (date) => {
-    setSelectedDate(date);
-  };
-
-  const renderCalendar = () => {
-    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    const dates = [2, 3, 4, 5, 6, 7, 8]; // Replace with your actual date range
-
-    return (
-      <View style={styles.calendarContainer}>
-        <View style={styles.calendarHeader}>
-          {days.map((day, index) => (
-            <Text key={index} style={styles.dayText}>
-              {day}
-            </Text>
-          ))}
-        </View>
-        <View style={styles.calendarDates}>
-          {dates.map((date, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.dateContainer,
-                selectedDate === date && styles.selectedDate,
-              ]}
-              onPress={() => handleDateSelection(date)}
-            >
-              <Text style={styles.dateText}>{date}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-    );
-  };
 
   const renderEvents = () => {
     return (
@@ -100,16 +63,43 @@ const CalendarScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <Text style={styles.header}>Calendar</Text>
-        <Text style={[styles.sectionTitle, { padding: 5 }]}>
-          Event Categories
-        </Text>
-        {renderCalendar()}
-        {renderEvents()}
-      </View>
-    </ScrollView>
+    <CalendarProvider date={new Date().toISOString().split("T")[0]}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={[styles.container, { marginBottom: -5, zIndex: 1 }]}>
+          <Text style={styles.header}>Calendar</Text>
+          <Text style={[styles.sectionTitle, { paddingBottom: 10 }]}>
+            Event Categories
+          </Text>
+        </View>
+        <View style={[styles.nextView, { marginTop: 0 }]}>
+          {/* Content of the next view */}
+        </View>
+        <View>
+          <WeekCalendar
+            style={{
+              height: 350,
+              padding: 5,
+              elevation: 0, // Remove shadow for Android
+              shadowColor: "transparent", // Remove shadow for iOS
+              shadowOffset: { width: 0, height: 0 }, // No shadow offset
+              shadowOpacity: 0, // Set shadow opacity to 0
+              shadowRadius: 0, // Remove shadow blur radius
+            }}
+            firstDay={1} // Optional: Monday as the first day of the week
+            markedDates={{
+              "2024-10-10": { marked: true, dotColor: "red" }, // Example of marking specific dates
+            }}
+            onDayPress={(day) => {
+              console.log("selected day", day);
+            }}
+          />
+        </View>
+        <View style={styles.container}>{renderEvents()}</View>
+      </ScrollView>
+    </CalendarProvider>
   );
 };
 
