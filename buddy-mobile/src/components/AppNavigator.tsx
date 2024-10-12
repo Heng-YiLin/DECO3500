@@ -13,6 +13,7 @@ import SignInScreen from "./SignInScreen";
 import EventScreen from './EventScreen'; // Your EventScreen component
 import Forum from './Forum';
 import SignUpScreen from "./SignUpScreen";
+import ProfileScreen from "./ProfileScreen"
 
 
 const Tab = createBottomTabNavigator();
@@ -106,6 +107,12 @@ export default function AppNavigator() {
           component={Forum}
           options={{ title: 'Forum', headerShown: false }} // Optionally add a title
         />
+         <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{ title: 'ProfileScreen', headerShown: false }} // Optionally add a title
+        />
+
 
       </Stack.Navigator>
     </NavigationContainer>
