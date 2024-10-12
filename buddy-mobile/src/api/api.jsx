@@ -57,3 +57,24 @@ export const postUserToDecoUsers = async (userData) => {
     throw error; // Propagate error upwards
   }
 };
+
+export const getEvents = async () => {
+  try {
+    const response = await apiRequest('events', 'GET'); // Fetches all events
+    console.log('Events fetched:', response); // Log the response for debugging
+    return response;
+  } catch (error) {
+    console.error('Failed to fetch events:', error); // Log any error that occurs
+    throw error; // Propagate error upwards
+  }
+};
+
+export async function getBuddyUpdates() {
+  try {
+    const response = await apiRequest('buddy_updates', 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error fetching buddy updates:', error);
+    throw error;
+  }
+}

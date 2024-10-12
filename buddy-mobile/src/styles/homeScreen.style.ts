@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
   },
   bottomEventCard:{
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
     padding:5,
   }
 });

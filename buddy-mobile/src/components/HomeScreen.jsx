@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,44 +6,94 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  StyleSheet,
   FlatList,
 } from "react-native";
 import styles from "../styles/homeScreen.style";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
+import { getEvents, getBuddyUpdates } from "../api/api"; // Import getEvents and getBuddyUpdates functions
 
 function HomeScreen() {
   const navigation = useNavigation();
+  const [events, setEvents] = useState([]); // State to hold the fetched events
+  const [loading, setLoading] = useState(true); // Loading state
+  const [searchQuery, setSearchQuery] = useState(''); // State to track the search query
+  const [showLocationSection, setShowLocationSection] = useState(true); // State to control visibility of the location section
+  const [buddyUpdates, setBuddyUpdates] = useState([]); // State to hold buddy updates
 
-  const events = [
-    {
-      id: 1,
-      title: "Book fair",
-      location: "Brisbane Showgrounds",
-      image: require("../assets/images/bookfair.png"),
-    },
-    {
-      id: 2,
-      title: "Orchestra",
-      location: "PAC Auditorium Stage",
-      image: require("../assets/images/orchestra.png"),
-    },
-    // Add more events as needed
-  ];
+  // Fetch events when the component mounts
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const fetchedEvents = await getEvents(); // Fetch events from the backend
+        setEvents(fetchedEvents); // Update the state with fetched events
+        setLoading(false); // Turn off loading
+      } catch (error) {
+        console.error("Error fetching events:", error); // Log any errors
+        setLoading(false); // Turn off loading on error
+      }
+    }
 
-  const renderEvent = ({ item }) => (
+    fetchEvents(); // Trigger the fetch
+  }, []);
+
+  // Fetch buddy updates for the "Buddy Updates" section
+  useEffect(() => {
+    async function fetchBuddyUpdates() {
+      try {
+        const updates = await getBuddyUpdates(); // Fetch buddy updates (users attending events)
+        setBuddyUpdates(updates);
+      } catch (error) {
+        console.error("Error fetching buddy updates:", error);
+      }
+    }
+
+    fetchBuddyUpdates();
+  }, []);
+
+  // Function to filter events by name
+  const filteredEvents = events.filter(event => 
+    event.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const renderEvent = ({ item, index }) => (
     <TouchableOpacity
       style={styles.eventCard}
       onPress={() => navigation.navigate('EventScreen', { eventId: item.id })}
     >
-      <Image source={item.image} style={styles.eventImage} />
+      {/* Alternating images based on index (even/odd) */}
+      <Image 
+        source={index % 2 === 0 ? require("../assets/images/bookfair.png") : require("../assets/images/orchestra.png")} 
+        style={styles.eventImage} 
+      />
       <View style={styles.bottomEventCard}>
-        <Text style={styles.sectionTitle}>{item.title}</Text>
+        <Text style={styles.sectionTitle}>{item.name}</Text>
         <Text>{item.location}</Text>
       </View>
     </TouchableOpacity>
   );
+
+  const renderBuddyUpdate = ({ item }) => (
+    <View style={styles.card}>
+      <Text style={{ fontWeight: "bold" }}>
+        {item.name} is attending {item.event_name}
+      </Text>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => navigation.navigate('EventScreen', { eventId: item.event_id })} // Navigate to event screen
+      >
+        <Text style={styles.buttonText}>View Details</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading events...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
@@ -67,55 +117,52 @@ function HomeScreen() {
             style={styles.searchBar}
             placeholder="Search Events"
             placeholderTextColor="gray"
+            value={searchQuery} // Bind searchQuery to the input field
+            onChangeText={setSearchQuery} // Update search query as user types
           />
         </View>
       </View>
 
       <View style={styles.homeBody}>
-        {/* Nearby Buddy Section */}
-        <View style={styles.section}>
-          <View style={styles.card}>
-            <Text style={styles.sectionTitle}>Nearby Available Buddy</Text>
-            <Text>Turn on location services</Text>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Turn on Location</Text>
-            </TouchableOpacity>
+        {/* Conditionally render the Nearby Buddy Section */}
+        {showLocationSection && (
+          <View style={styles.section}>
+            <View style={styles.card}>
+              <Text style={styles.sectionTitle}>Nearby Available Buddy</Text>
+              <Text>Turn on location services</Text>
+              <TouchableOpacity 
+                style={styles.button}
+                onPress={() => setShowLocationSection(false)} // Hide section when clicked
+              >
+                <Text style={styles.buttonText}>Turn on Location</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        )}
+
         {/* Upcoming Events Section */}
         <Text style={styles.sectionHeader}>Upcoming Events</Text>
- </View>
- <View style={styles.carouselContainer}>
-          <FlatList
-            data={events}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id}
-            renderItem={renderEvent}
-          />
-        </View>
- <View style={styles.homeBody}>
+      </View>
 
+      <View style={styles.carouselContainer}>
+        <FlatList
+          data={filteredEvents} // Use the filtered events instead of all events
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()} // Ensure proper key
+          renderItem={renderEvent}
+        />
+      </View>
+
+      <View style={styles.homeBody}>
         {/* Buddy Updates Section */}
         <Text style={styles.sectionHeader}>Buddy Updates</Text>
         <View style={styles.buddyUpdates}>
-          <View style={styles.card}>
-            <Text style={{ fontWeight: "bold" }}>
-              Sam is going to book week
-            </Text>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>RSVP</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={{ fontWeight: "bold" }}>
-              Sam and you are going to the Orchestra
-            </Text>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>View Details</Text>
-            </TouchableOpacity>
-          </View>
+          <FlatList
+            data={buddyUpdates} // Use buddy updates data
+            keyExtractor={(item) => item.event_id.toString()} // Ensure proper key
+            renderItem={renderBuddyUpdate} // Render buddy update cards
+          />
         </View>
       </View>
     </ScrollView>
