@@ -1,8 +1,10 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons"; // If using Expo for icons
 import styles from "../styles/buddyScreen.style";
 import { Button } from "react-native-paper";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Import async storage for retrieving loggedInUser
+import { getBuddies, getAllUsers, getSameCulturalBackgroundUsers, getSameLanguageUsers } from "../api/api"; // Import API calls
 import {
   View,
   Text,
@@ -11,60 +13,171 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+// Helper function to filter out duplicates
+const removeDuplicates = (arr) => {
+  return [...new Set(arr)]; // Use Set to remove duplicates and return a unique array
+};
+
+// Profile Section Component
 const ProfileSection = ({ title, profiles, users }) => {
-  const navigation = useNavigation(); // Get the navigation object
+  const navigation = useNavigation();
+
+  // Filter valid profiles (users that are found in the `users` array)
+  const validProfiles = profiles
+    .map((id) => users.find((user) => user.id === id))
+    .filter((user) => user); // Remove undefined values
 
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>{title}</Text>
       </View>
-      <FlatList
-        data={profiles.map(id => users.find(user => user.id === id))} // Map IDs to user objects
-        renderItem={({ item }) => (
-          item ? ( // Check if item exists
-            <TouchableOpacity 
-              style={styles.iconContainer}
-              onPress={() => navigation.navigate('ProfileScreen', { Id: item.id })} // Navigate to ProfileScreen
-            >
-              <Ionicons name="person-circle-outline" size={40} color="#1F3A6E" />
-              <Text style={styles.profileName}>{item.username}</Text>
-            </TouchableOpacity>
-          ) : null
-        )}
-        keyExtractor={item => item.id.toString()} // Key extractor for FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.profiles} // Optional: Add additional styles if needed
-      />
+      {validProfiles.length > 0 ? (
+        <FlatList
+          data={validProfiles} // Use valid profiles
+          renderItem={({ item }) =>
+            item ? ( // Check if item exists
+              <TouchableOpacity
+                style={styles.iconContainer}
+                onPress={() => navigation.navigate("ProfileScreen", { Id: item.id })} // Navigate to ProfileScreen
+              >
+                <Ionicons name="person-circle-outline" size={40} color="#1F3A6E" />
+                {/* Display only the first name */}
+                <Text style={styles.profileName}>{item.name.split(' ')[0]}</Text>
+              </TouchableOpacity>
+            ) : null
+          }
+          keyExtractor={(item) => (item ? item.id.toString() : Math.random().toString())} // Guard against undefined
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.profiles}
+        />
+      ) : (
+        <Text style={styles.noUsersFoundText}>No users found.</Text> // Display this if no valid profiles
+      )}
     </View>
   );
 };
 
 const BuddyScreen = () => {
-  const users = [
-    { id: 1, username: 'Sam', password: '12345', background: 'Asian', languages: ['English', 'Spanish'], interests: ['Traveling', 'Cooking'], location: 'New York' },
-    { id: 2, username: 'Polly', password: 'abcde', background: 'European', languages: ['English'], interests: ['Reading', 'Music'], location: 'London' },
-    { id: 3, username: 'Nisha', password: 'pass123', background: 'Indian', languages: ['Hindi', 'English'], interests: ['Art', 'Photography'], location: 'Mumbai' },
-    { id: 4, username: 'Tony', password: 'pass456', background: 'Asian', languages: ['Chinese', 'English'], interests: ['Gaming', 'Sports'], location: 'Beijing' },
-    { id: 5, username: 'Henry', password: 'pass789', background: 'African', languages: ['English', 'Swahili'], interests: ['Music', 'Dancing'], location: 'Nairobi' },
-    { id: 6, username: 'Lonni', password: 'pass000', background: 'European', languages: ['German', 'English'], interests: ['Cooking', 'Traveling'], location: 'Berlin' },
-    { id: 7, username: 'Bill', password: 'xyz123', background: 'American', languages: ['English'], interests: ['Sports', 'Movies'], location: 'Los Angeles' },
-    { id: 8, username: 'Lucy', password: 'pass111', background: 'Australian', languages: ['English'], interests: ['Surfing', 'Traveling'], location: 'Sydney' },
-  ];
-  
-  const buddies = [1]; // ID of Sam
-  const requests = [2]; // ID of Polly
-  const sameCulturalBackground = [3, 4, 5, 6]; // IDs of Nisha, Tony, Henry, Lonni
-  const sameLanguage = [1, 7]; // IDs of Sam, Bill
-  const nearby = [8]; // ID of Lucy
+  const [loggedInUserId, setLoggedInUserId] = useState(null);
+  const [loggedInUserBackground, setLoggedInUserBackground] = useState(null); // Store the logged-in user's background
+  const [loggedInUserLanguages, setLoggedInUserLanguages] = useState([]); // Store the logged-in user's languages
+  const [buddies, setBuddies] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [sameCulturalBackground, setSameCulturalBackground] = useState([]);
+  const [sameLanguage, setSameLanguage] = useState([]);
+  const [nearby, setNearby] = useState([]);
+
+  // States to control visibility of blue boxes
+  const [showLocationBox, setShowLocationBox] = useState(true);
+  const [showExpandReachBox, setShowExpandReachBox] = useState(true);
+
+  // Fetch logged-in user ID, background, and languages from AsyncStorage
+  useEffect(() => {
+    const fetchLoggedInUserId = async () => {
+      try {
+        const storedUser = await AsyncStorage.getItem("loggedInUser");
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          setLoggedInUserId(userData.id); // Set the loggedInUser ID
+          setLoggedInUserBackground(userData.background); // Set the loggedInUser background
+          setLoggedInUserLanguages(userData.languages ? userData.languages.split(", ") : []); // Set the loggedInUser languages
+        }
+      } catch (error) {
+        console.error("Error retrieving logged-in user:", error);
+      }
+    };
+    fetchLoggedInUserId();
+  }, []);
+
+  // Fetch buddies and users from the API
+  useEffect(() => {
+    const fetchBuddiesAndUsers = async () => {
+      try {
+        if (loggedInUserId) {
+          // Fetch buddies for the logged-in user
+          const fetchedBuddies = await getBuddies(loggedInUserId);
+          console.log("Fetched Buddies:", fetchedBuddies);
+
+          // Fetch all users to map profiles to buddy IDs
+          const fetchedUsers = await getAllUsers();
+          setUsers(fetchedUsers);
+
+          // Logic to identify valid buddies and pending requests
+          const validBuddies = [];
+          const pendingRequests = [];
+
+          fetchedBuddies.forEach((buddy) => {
+            // Check if buddy relationship is mutual (both directions exist)
+            const mutualBuddy = fetchedBuddies.find(
+              (b) =>
+                b.user1_id === buddy.user2_id && b.user2_id === buddy.user1_id
+            );
+
+            if (mutualBuddy) {
+              // Valid buddy if mutual relationship exists
+              if (buddy.user1_id === loggedInUserId) {
+                validBuddies.push(buddy.user2_id);
+              } else if (buddy.user2_id === loggedInUserId) {
+                validBuddies.push(buddy.user1_id);
+              }
+            } else if (!mutualBuddy && buddy.user2_id === loggedInUserId) {
+              // Pending request if only one-way relationship exists
+              pendingRequests.push(buddy.user1_id);
+            }
+          });
+
+          // Remove duplicate buddy IDs
+          const uniqueBuddies = removeDuplicates(validBuddies);
+          const uniqueRequests = removeDuplicates(pendingRequests);
+
+          console.log("Unique Buddies:", uniqueBuddies);
+          console.log("Pending Requests:", uniqueRequests);
+
+          setBuddies(uniqueBuddies);
+          setRequests(uniqueRequests);
+
+          // Fetch users with the same cultural background (who are not buddies)
+          if (loggedInUserBackground) {
+            const sameBackgroundUsers = await getSameCulturalBackgroundUsers(loggedInUserBackground);
+            const filteredBackgroundUsers = sameBackgroundUsers
+              .filter(
+                (user) => user.id !== loggedInUserId && !uniqueBuddies.includes(user.id)
+              ); // Exclude the logged-in user and existing buddies
+
+            setSameCulturalBackground(filteredBackgroundUsers.map(user => user.id)); // Extract only the user IDs
+          }
+
+          // Fetch users with the same language (who are not buddies)
+          if (loggedInUserLanguages.length > 0) {
+            const sameLanguageUsers = await getSameLanguageUsers(loggedInUserLanguages);
+            const filteredLanguageUsers = sameLanguageUsers
+              .filter(
+                (user) => user.id !== loggedInUserId && !uniqueBuddies.includes(user.id)
+              ); // Exclude the logged-in user and existing buddies
+
+            setSameLanguage(filteredLanguageUsers.map(user => user.id)); // Extract only the user IDs
+          }
+
+          // For now, placeholders for other categories (actual logic to be added later)
+          setNearby([]); // Placeholder for nearby logic
+        }
+      } catch (error) {
+        console.error("Error fetching buddies or users:", error);
+      }
+    };
+    fetchBuddiesAndUsers();
+  }, [loggedInUserId, loggedInUserBackground, loggedInUserLanguages]);
 
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <Text style={styles.header}>Buddies</Text>
       <View style={styles.bodyContainer}>
-        <View style={styles.card}>
-          <View>
+        {/* Nearby Available Buddy Section */}
+        {showLocationBox && (
+          <View style={styles.card}>
             <Text style={[styles.sectionTitle, { padding: 5 }]}>
               Nearby Available Buddy
             </Text>
@@ -76,37 +189,57 @@ const BuddyScreen = () => {
               textColor="#FFFFFF"
               mode="elevated"
               labelStyle={{ fontWeight: "bold" }}
-              onPress={() => console.log("location button")}
+              onPress={() => setShowLocationBox(false)} // Hide the box when clicked
             >
               Turn on Location
             </Button>
           </View>
-        </View>
-        
+        )}
+
+        {/* Your Buddies Section */}
         <ProfileSection title="Your Buddies" profiles={buddies} users={users} />
+
+        {/* Requests Section */}
         <ProfileSection title="Requests" profiles={requests} users={users} />
-        <ProfileSection title="Same Cultural Background" profiles={sameCulturalBackground} users={users} />
-        <ProfileSection title="Same Language" profiles={sameLanguage} users={users} />
+
+        {/* Same Cultural Background Section */}
+        <ProfileSection
+          title="Same Cultural Background"
+          profiles={sameCulturalBackground}
+          users={users}
+        />
+
+        {/* Same Language Section */}
+        <ProfileSection
+          title="Same Language"
+          profiles={sameLanguage}
+          users={users}
+        />
+
+        {/* Nearby Section (Future Logic) */}
         <ProfileSection title="Nearby" profiles={nearby} users={users} />
 
-        <View style={styles.card}>
-          <Text style={[styles.sectionTitle, { padding: 5 }]}>
-            Can't find a buddy?
-          </Text>
-          <Text style={[styles.sectionTitle, { padding: 5, paddingBottom: 20 }]}>
-            We get it, expand your reach.
-          </Text>
+        {/* Can't find a buddy? Blue Box */}
+        {showExpandReachBox && (
+          <View style={styles.card}>
+            <Text style={[styles.sectionTitle, { padding: 5 }]}>
+              Can't find a buddy?
+            </Text>
+            <Text style={[styles.sectionTitle, { padding: 5, paddingBottom: 20 }]}>
+              We get it, expand your reach.
+            </Text>
 
-          <Button
-            buttonColor="#407FDC"
-            textColor="#FFFFFF"
-            mode="elevated"
-            labelStyle={{ fontWeight: "bold" }}
-            onPress={() => console.log("Make profile visible button")}
-          >
-            Make profile visible to other schools
-          </Button>
-        </View>
+            <Button
+              buttonColor="#407FDC"
+              textColor="#FFFFFF"
+              mode="elevated"
+              labelStyle={{ fontWeight: "bold" }}
+              onPress={() => setShowExpandReachBox(false)} // Hide the box when clicked
+            >
+              Make profile visible to other schools
+            </Button>
+          </View>
+        )}
       </View>
     </ScrollView>
   );

@@ -62,6 +62,13 @@ CREATE TABLE forum_comments (
     comment_text TEXT NOT NULL  -- The content of the comment
 );
 
+CREATE TABLE buddies (
+    id SERIAL PRIMARY KEY,          -- Automatically increments IDs for each buddy pair
+    user1_id INTEGER NOT NULL REFERENCES deco_users(id) ON DELETE CASCADE, -- First user in the buddy pair, references deco_users
+    user2_id INTEGER NOT NULL REFERENCES deco_users(id) ON DELETE CASCADE, -- Second user in the buddy pair, references deco_users
+    UNIQUE(user1_id, user2_id)      -- Ensures that each buddy pair is unique
+);
+
 -- Grant permissions to a student
 GRANT USAGE ON SCHEMA api TO student;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA api TO student;

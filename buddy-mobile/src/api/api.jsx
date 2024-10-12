@@ -39,6 +39,7 @@ const apiRequest = async (endpoint, method = 'GET', body = null) => {
   }
 };
 
+// ------------ SIGNUP/SIGNIN ---------------- //
 export const postUserToDecoUsers = async (userData) => {
   console.log("User Data: ", userData); // Log the user data being sent
   try {
@@ -72,6 +73,18 @@ export async function checkUserEmail(email) {
   }
 }
 
+// ------------ HOME SCREEN ---------------- //
+export async function getBuddyUpdates() {
+  try {
+    const response = await apiRequest('buddy_updates', 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error fetching buddy updates:', error);
+    throw error;
+  }
+}
+
+// ------------ EVENTS ---------------- //
 export const getEvents = async () => {
   try {
     const response = await apiRequest('events', 'GET'); // Fetches all events
@@ -98,16 +111,8 @@ export async function getEvent(eventId) {
 }
 
 
-export async function getBuddyUpdates() {
-  try {
-    const response = await apiRequest('buddy_updates', 'GET');
-    return response;
-  } catch (error) {
-    console.error('Error fetching buddy updates:', error);
-    throw error;
-  }
-}
 
+// ------------ EVENT RSVP ---------------- //
 export const checkIfUserRSVPed = async (userId, eventId) => {
   try {
     const response = await apiRequest(`/events_attending?user_id=eq.${userId}&event_id=eq.${eventId}`, "GET");
@@ -137,3 +142,44 @@ export const toggleRSVP = async (userId, eventId, isRSVPed) => {
     return false;
   }
 };
+
+// ------------ BUDDIES ---------------- //
+// Fetch logged-in user's buddies (mutual buddies)
+export async function getBuddies(userId) {
+  console.log("id: ", userId);
+  const response = await apiRequest(`buddies?or=(user1_id.eq.${userId},user2_id.eq.${userId})`);
+  return response;
+}
+
+// Fetch buddy requests (one-way, i.e. incoming requests)
+export async function getBuddyRequests(userId) {
+  const response = await apiRequest(`buddies?user2_id=eq.${userId}`);
+  return response;
+}
+
+// Fetch users with the same cultural background
+export async function getSameCulturalBackgroundUsers(background) {
+  console.log("background: ", background);
+  const response = await apiRequest(`deco_users?background=eq.${background}`);
+  console.log("response: ", response);
+  return response;
+}
+
+// Fetch users who share the same language
+export async function getSameLanguageUsers(languages) {
+  console.log("languages: ", languages);
+  const languageQuery = languages
+    .map((lang) => `languages.ilike.%25${lang}%25`) // Adjust to handle ilike for each language
+    .join('&'); // Join each language with '&' for proper filtering
+  console.log ("language query: ", languageQuery);
+  const response = await apiRequest(`deco_users?${languageQuery}`);
+  console.log("lang response: ", response);
+  return response;
+}
+
+
+// Fetch all users from the database
+export async function getAllUsers() {
+  const response = await apiRequest('deco_users');
+  return response;
+}
