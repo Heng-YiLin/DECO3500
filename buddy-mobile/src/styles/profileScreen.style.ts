@@ -6,28 +6,50 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
   },
-  body: {
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    padding: 25,
-    backgroundColor: "white",
-    width: "100%",
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  bodyBottom: {
-    flexGrow: 1,
-    paddingBottom: 20,
-    justifyContent: "flex-end",
-    padding: 25,
+  backButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    zIndex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.3)", // Light shadowed circle
+    padding: 10,
+    borderRadius: 50,
+  },
+  logoutButton: {
+    position: "absolute",
+    top: 50,
+    right: 20,
+    zIndex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.3)", // Same style as back button
+    padding: 10,
+    borderRadius: 50,
   },
   image: {
     width: "100%",
-    height: 300,
+    height: 400,
     marginBottom: -30,
   },
+  body: {
+    padding: 25,
+    backgroundColor: "white",
+    width: "100%",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
   title: {
-    fontSize: 36,
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#274766",
   },
   locationContainer: {
     flexDirection: "row",
@@ -40,10 +62,6 @@ const styles = StyleSheet.create({
     color: "#407FDC",
     marginLeft: 4,
   },
-  description: {
-    fontSize: 16,
-    marginBottom: 16,
-  },
   descriptionContainer: {
     paddingTop: 20,
     borderTopWidth: 1,
@@ -54,35 +72,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 8,
   },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 16,
-    width: "100%",
-    paddingVertical: 20,
-    borderTopWidth: 1,
-    borderTopColor: "gray",
-  },
-  backButton: {
-    position: "absolute",
-    top: 50,
-    left: 20,
-    zIndex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
-    padding: 10,
-    borderRadius: 50,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
+  description: {
+    fontSize: 16,
+    marginBottom: 16,
   },
 });
 
