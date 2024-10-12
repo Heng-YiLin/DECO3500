@@ -110,7 +110,6 @@ function HomeScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Loading events...</Text>
       </View>
     );
   }
