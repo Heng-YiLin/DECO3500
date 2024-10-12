@@ -11,6 +11,7 @@ import {
 import styles from "../styles/homeScreen.style";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage for user data retrieval
 import { getEvents, getBuddyUpdates } from "../api/api"; // Import getEvents and getBuddyUpdates functions
 
 function HomeScreen() {
@@ -20,6 +21,7 @@ function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState(''); // State to track the search query
   const [showLocationSection, setShowLocationSection] = useState(true); // State to control visibility of the location section
   const [buddyUpdates, setBuddyUpdates] = useState([]); // State to hold buddy updates
+  const [userName, setUserName] = useState(''); // State to hold the first name of the user
 
   // Fetch events when the component mounts
   useEffect(() => {
@@ -49,6 +51,24 @@ function HomeScreen() {
     }
 
     fetchBuddyUpdates();
+  }, []);
+
+  // Fetch logged-in user data when the component mounts
+  useEffect(() => {
+    async function loadUserData() {
+      try {
+        const userData = await AsyncStorage.getItem('loggedInUser'); // Retrieve logged-in user data from AsyncStorage
+        if (userData) {
+          const user = JSON.parse(userData); // Parse the user data
+          const firstName = user.name.split(' ')[0]; // Extract the first name from the full name
+          setUserName(firstName); // Update the state with the first name
+        }
+      } catch (error) {
+        console.error("Error loading user data:", error);
+      }
+    }
+
+    loadUserData(); // Trigger user data loading
   }, []);
 
   // Function to filter events by name
@@ -104,7 +124,7 @@ function HomeScreen() {
             source={require("../assets/images/homeImg.png")}
             style={styles.headerImg}
           />
-          <Text style={styles.greeting}>Hello, Bill</Text>
+          <Text style={styles.greeting}>Hello, {userName}</Text>
         </View>
         <View style={styles.searchBarContainer}>
           <Ionicons

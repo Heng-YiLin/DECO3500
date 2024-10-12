@@ -46,7 +46,7 @@ export default function SignUpScreen({ navigation }) {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: "MainTabs" }],
+          routes: [{ name: "Login" }],
         })
       );
     } catch (error) {

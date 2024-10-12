@@ -58,6 +58,20 @@ export const postUserToDecoUsers = async (userData) => {
   }
 };
 
+export async function checkUserEmail(email) {
+  try {
+    const response = await apiRequest(`deco_users?email=eq.${email}`, 'GET');
+    if (response.length > 0) {
+      return response[0]; // Return the user object if email exists
+    } else {
+      return null; // Email not found
+    }
+  } catch (error) {
+    console.error('Error checking email:', error);
+    return null;
+  }
+}
+
 export const getEvents = async () => {
   try {
     const response = await apiRequest('events', 'GET'); // Fetches all events
