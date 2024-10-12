@@ -7,9 +7,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between', 
   },
   body: {
-    alignItems: "center", // Center horizontally
-    flexGrow: 1, // Allows the body to grow and take remaining space
-    justifyContent: "flex-end",    // Center horizontally
+    alignItems: "center", 
+    flexGrow: 1, 
+    justifyContent: "flex-end", 
     paddingBottom:20,
   },
   title: {
@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 15,
-    shadowColor: "#000", // Shadow color
+    shadowColor: "#000", 
     shadowOffset: {
-      width: 1,  // Horizontal shadow offset
-      height: 3, // Vertical shadow offset
+      width: 1,  
+      height: 3, 
     },
     shadowOpacity: 0.25,   // Shadow transparency
     shadowRadius: 3.84,    // Shadow blur radius

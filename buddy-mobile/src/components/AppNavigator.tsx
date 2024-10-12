@@ -10,10 +10,10 @@ import { Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import SignInScreen from "./SignInScreen";
-import EventScreen from './EventScreen'; // Your EventScreen component
-import Forum from './Forum';
+import EventScreen from "./EventScreen"; // Your EventScreen component
+import Forum from "./Forum";
 import SignUpScreen from "./SignUpScreen";
-
+import ProfileScreen from "./ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -42,9 +42,7 @@ function MainTabs() {
         },
         tabBarLabel: ({ focused }) => {
           return focused ? (
-            <Text style={{ color: "#E48022", fontSize: 10 }}>
-              {route.name}
-            </Text>
+            <Text style={{ color: "#E48022", fontSize: 10 }}>{route.name}</Text>
           ) : null;
         },
         tabBarActiveTintColor: "#E48022",
@@ -59,7 +57,6 @@ function MainTabs() {
       <Tab.Screen name="Form" component={Form} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
-
   );
 }
 
@@ -99,14 +96,18 @@ export default function AppNavigator() {
         <Stack.Screen
           name="EventScreen"
           component={EventScreen}
-          options={{ title: 'Event Details', headerShown: false }} // Optionally add a title
+          options={{ title: "Event Details", headerShown: false }} // Optionally add a title
         />
         <Stack.Screen
           name="Forum"
           component={Forum}
-          options={{ title: 'Forum', headerShown: false }} // Optionally add a title
+          options={{ title: "Forum", headerShown: false }} // Optionally add a title
         />
-
+        <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{ title: "ProfileScreen", headerShown: false }} // Optionally add a title
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
