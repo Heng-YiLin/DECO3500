@@ -83,6 +83,21 @@ export const getEvents = async () => {
   }
 };
 
+export async function getEvent(eventId) {
+  try {
+    const response = await apiRequest(`events?id=eq.${eventId}`, 'GET');
+    if (response.length > 0) {
+      return response[0]; // Return the first event that matches the eventId
+    } else {
+      return null; // No event found
+    }
+  } catch (error) {
+    console.error('Error fetching event data:', error);
+    throw error;
+  }
+}
+
+
 export async function getBuddyUpdates() {
   try {
     const response = await apiRequest('buddy_updates', 'GET');
@@ -92,3 +107,33 @@ export async function getBuddyUpdates() {
     throw error;
   }
 }
+
+export const checkIfUserRSVPed = async (userId, eventId) => {
+  try {
+    const response = await apiRequest(`/events_attending?user_id=eq.${userId}&event_id=eq.${eventId}`, "GET");
+    return response.length > 0; // If the response array has a length, the user has RSVP'd
+  } catch (error) {
+    console.error("Error checking RSVP status:", error);
+    return false;
+  }
+};
+
+// Function to toggle RSVP (add or remove based on the current state)
+export const toggleRSVP = async (userId, eventId, isRSVPed) => {
+  try {
+    if (isRSVPed) {
+      // If the user has RSVP'd, remove the RSVP
+      await apiRequest(`/events_attending?user_id=eq.${userId}&event_id=eq.${eventId}`, "DELETE");
+    } else {
+      // If the user has not RSVP'd, add a new RSVP
+      await apiRequest(`/events_attending`, "POST", {
+        user_id: userId,
+        event_id: eventId,
+      });
+    }
+    return true;
+  } catch (error) {
+    console.error("Error toggling RSVP status:", error);
+    return false;
+  }
+};
