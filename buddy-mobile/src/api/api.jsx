@@ -177,9 +177,49 @@ export async function getSameLanguageUsers(languages) {
   return response;
 }
 
-
 // Fetch all users from the database
 export async function getAllUsers() {
   const response = await apiRequest('deco_users');
   return response;
 }
+
+// ------------ USERS ---------------- //
+export async function getUserProfile(userId) {
+  const response = await apiRequest(`deco_users?id=eq.${userId}`);
+  return response.length > 0 ? response[0] : null; // Return the first result if found
+}
+
+export const checkIfUsersAreBuddies = async (user1_id, user2_id) => {
+  try {
+    const response = await apiRequest(
+      `/buddies?or=(user1_id.eq.${user1_id},user1_id.eq.${user2_id})&or=(user2_id.eq.${user1_id},user2_id.eq.${user2_id})`,
+      "GET"
+    );
+    return response.length > 0; // If the response array has a length, the users are buddies
+  } catch (error) {
+    console.error("Error checking buddy status:", error);
+    return false;
+  }
+};
+
+export const toggleBuddyRequest = async (user1_id, user2_id, isBuddy) => {
+  try {
+    if (isBuddy) {
+      // If the users are buddies, remove the buddy relationship
+      await apiRequest(
+        `/buddies?or=(user1_id.eq.${user1_id},user1_id.eq.${user2_id})&or=(user2_id.eq.${user1_id},user2_id.eq.${user2_id})`,
+        "DELETE"
+      );
+    } else {
+      // If the users are not buddies, add a new buddy request
+      await apiRequest(`/buddies`, "POST", {
+        user1_id: user1_id,
+        user2_id: user2_id,
+      });
+    }
+    return true;
+  } catch (error) {
+    console.error("Error toggling buddy request:", error);
+    return false;
+  }
+};

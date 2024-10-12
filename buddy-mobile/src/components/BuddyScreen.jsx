@@ -11,6 +11,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator, // Import to show loading indicator
 } from "react-native";
 
 // Helper function to filter out duplicates
@@ -64,15 +65,71 @@ const BuddyScreen = () => {
   const [loggedInUserBackground, setLoggedInUserBackground] = useState(null); // Store the logged-in user's background
   const [loggedInUserLanguages, setLoggedInUserLanguages] = useState([]); // Store the logged-in user's languages
   const [buddies, setBuddies] = useState([]);
-  const [requests, setRequests] = useState([]);
   const [users, setUsers] = useState([]);
   const [sameCulturalBackground, setSameCulturalBackground] = useState([]);
   const [sameLanguage, setSameLanguage] = useState([]);
   const [nearby, setNearby] = useState([]);
+  const [loading, setLoading] = useState(true); // State to track loading
 
   // States to control visibility of blue boxes
   const [showLocationBox, setShowLocationBox] = useState(true);
   const [showExpandReachBox, setShowExpandReachBox] = useState(true);
+
+  // Function to fetch buddies and users
+  const fetchBuddiesAndUsers = async () => {
+    try {
+      if (loggedInUserId) {
+        setLoading(true); // Set loading to true when fetching data
+
+        // Fetch buddies for the logged-in user
+        const fetchedBuddies = await getBuddies(loggedInUserId);
+        console.log("Fetched Buddies:", fetchedBuddies);
+
+        // Fetch all users to map profiles to buddy IDs
+        const fetchedUsers = await getAllUsers();
+        setUsers(fetchedUsers);
+
+        // Identify valid buddies where logged-in user is user1_id
+        const validBuddies = fetchedBuddies
+          .filter((buddy) => buddy.user1_id === loggedInUserId)
+          .map((buddy) => buddy.user2_id);
+
+        const uniqueBuddies = removeDuplicates(validBuddies);
+
+        console.log("Unique Buddies:", uniqueBuddies);
+        setBuddies(uniqueBuddies);
+
+        // Fetch users with the same cultural background (who are not buddies)
+        if (loggedInUserBackground) {
+          const sameBackgroundUsers = await getSameCulturalBackgroundUsers(loggedInUserBackground);
+          const filteredBackgroundUsers = sameBackgroundUsers
+            .filter(
+              (user) => user.id !== loggedInUserId && !uniqueBuddies.includes(user.id)
+            ); // Exclude the logged-in user and existing buddies
+
+          setSameCulturalBackground(filteredBackgroundUsers.map(user => user.id)); // Extract only the user IDs
+        }
+
+        // Fetch users with the same language (who are not buddies)
+        if (loggedInUserLanguages.length > 0) {
+          const sameLanguageUsers = await getSameLanguageUsers(loggedInUserLanguages);
+          const filteredLanguageUsers = sameLanguageUsers
+            .filter(
+              (user) => user.id !== loggedInUserId && !uniqueBuddies.includes(user.id)
+            ); // Exclude the logged-in user and existing buddies
+
+          setSameLanguage(filteredLanguageUsers.map(user => user.id)); // Extract only the user IDs
+        }
+
+        // For now, placeholders for other categories (actual logic to be added later)
+        setNearby([]); // Placeholder for nearby logic
+        setLoading(false); // Stop loading once data is fetched
+      }
+    } catch (error) {
+      console.error("Error fetching buddies or users:", error);
+      setLoading(false); // Stop loading in case of error
+    }
+  };
 
   // Fetch logged-in user ID, background, and languages from AsyncStorage
   useEffect(() => {
@@ -92,84 +149,17 @@ const BuddyScreen = () => {
     fetchLoggedInUserId();
   }, []);
 
-  // Fetch buddies and users from the API
+  // Fetch buddies and users on initial render
   useEffect(() => {
-    const fetchBuddiesAndUsers = async () => {
-      try {
-        if (loggedInUserId) {
-          // Fetch buddies for the logged-in user
-          const fetchedBuddies = await getBuddies(loggedInUserId);
-          console.log("Fetched Buddies:", fetchedBuddies);
+    if (loggedInUserId) {
+      fetchBuddiesAndUsers(); // Fetch data when user ID is available
+    }
+  }, [loggedInUserId]);
 
-          // Fetch all users to map profiles to buddy IDs
-          const fetchedUsers = await getAllUsers();
-          setUsers(fetchedUsers);
-
-          // Logic to identify valid buddies and pending requests
-          const validBuddies = [];
-          const pendingRequests = [];
-
-          fetchedBuddies.forEach((buddy) => {
-            // Check if buddy relationship is mutual (both directions exist)
-            const mutualBuddy = fetchedBuddies.find(
-              (b) =>
-                b.user1_id === buddy.user2_id && b.user2_id === buddy.user1_id
-            );
-
-            if (mutualBuddy) {
-              // Valid buddy if mutual relationship exists
-              if (buddy.user1_id === loggedInUserId) {
-                validBuddies.push(buddy.user2_id);
-              } else if (buddy.user2_id === loggedInUserId) {
-                validBuddies.push(buddy.user1_id);
-              }
-            } else if (!mutualBuddy && buddy.user2_id === loggedInUserId) {
-              // Pending request if only one-way relationship exists
-              pendingRequests.push(buddy.user1_id);
-            }
-          });
-
-          // Remove duplicate buddy IDs
-          const uniqueBuddies = removeDuplicates(validBuddies);
-          const uniqueRequests = removeDuplicates(pendingRequests);
-
-          console.log("Unique Buddies:", uniqueBuddies);
-          console.log("Pending Requests:", uniqueRequests);
-
-          setBuddies(uniqueBuddies);
-          setRequests(uniqueRequests);
-
-          // Fetch users with the same cultural background (who are not buddies)
-          if (loggedInUserBackground) {
-            const sameBackgroundUsers = await getSameCulturalBackgroundUsers(loggedInUserBackground);
-            const filteredBackgroundUsers = sameBackgroundUsers
-              .filter(
-                (user) => user.id !== loggedInUserId && !uniqueBuddies.includes(user.id)
-              ); // Exclude the logged-in user and existing buddies
-
-            setSameCulturalBackground(filteredBackgroundUsers.map(user => user.id)); // Extract only the user IDs
-          }
-
-          // Fetch users with the same language (who are not buddies)
-          if (loggedInUserLanguages.length > 0) {
-            const sameLanguageUsers = await getSameLanguageUsers(loggedInUserLanguages);
-            const filteredLanguageUsers = sameLanguageUsers
-              .filter(
-                (user) => user.id !== loggedInUserId && !uniqueBuddies.includes(user.id)
-              ); // Exclude the logged-in user and existing buddies
-
-            setSameLanguage(filteredLanguageUsers.map(user => user.id)); // Extract only the user IDs
-          }
-
-          // For now, placeholders for other categories (actual logic to be added later)
-          setNearby([]); // Placeholder for nearby logic
-        }
-      } catch (error) {
-        console.error("Error fetching buddies or users:", error);
-      }
-    };
-    fetchBuddiesAndUsers();
-  }, [loggedInUserId, loggedInUserBackground, loggedInUserLanguages]);
+  // Manually refresh all categories when the refresh button is pressed
+  const handleRefresh = () => {
+    fetchBuddiesAndUsers(); // Re-fetch all categories when refreshing
+  };
 
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
@@ -196,11 +186,20 @@ const BuddyScreen = () => {
           </View>
         )}
 
+        {/* Loading Indicator */}
+        {loading && (
+          <ActivityIndicator size="large" color="#407FDC" />
+        )}
+      {/* Refresh Button */}
+      <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
+          <Ionicons name="refresh" size={32} color="#407FDC" />
+        </TouchableOpacity>
         {/* Your Buddies Section */}
-        <ProfileSection title="Your Buddies" profiles={buddies} users={users} />
-
-        {/* Requests Section */}
-        <ProfileSection title="Requests" profiles={requests} users={users} />
+        {!loading && (
+          <>
+            <ProfileSection title="Your Buddies" profiles={buddies} users={users} />
+          </>
+        )}
 
         {/* Same Cultural Background Section */}
         <ProfileSection

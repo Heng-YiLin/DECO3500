@@ -133,7 +133,7 @@ function EventScreen() {
         </View>
 
         <View style={styles.locationContainer}>
-          <Ionicons name="location-outline" size={16} color="gray" />
+          <Ionicons name="location-outline" size={32} color="gray" />
           <Text style={styles.location}>{event.location}</Text>
         </View>
 

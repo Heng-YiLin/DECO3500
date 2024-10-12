@@ -7,81 +7,82 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   body: {
-    borderTopLeftRadius: 30, // Apply radius to the top-left corner
+    borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 25,
     backgroundColor: "white",
     width: "100%",
   },
   bodyBottom: {
-    flexGrow: 1, // Allows the body to grow and take remaining space
+    flexGrow: 1,
     paddingBottom: 20,
-    justifyContent: "flex-end",   
+    justifyContent: "flex-end",
     padding: 25,
-
   },
   image: {
     width: "100%",
-    height: 400,
+    height: 300,
     marginBottom: -30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 36,
     fontWeight: "bold",
-    marginBottom: 8,
+    color: "#274766",
   },
-  date: {
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  location: {
     fontSize: 16,
-    color: "gray",
-    marginBottom: 8,
+    fontWeight: "bold",
+    color: "#407FDC",
+    marginLeft: 4,
   },
   description: {
     fontSize: 16,
     marginBottom: 16,
   },
-  descriptionContainer:{
-    paddingTop:20,
-    borderTopWidth: 1, // Set the border width
-    borderTopColor: 'gray', // Set the border color
+  descriptionContainer: {
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: "gray",
   },
   agendaTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 8,
   },
-  agendaItem: {
-    fontSize: 16,
-    marginVertical: 2,
-  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 16,
     width: "100%",
-    paddingVertical:20,
-    borderTopWidth: 1, // Set the border width
-    borderTopColor: 'gray', // Set the border color
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderTopColor: "gray",
   },
-  button: {
-    backgroundColor: "#407FDC",
+  backButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    zIndex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
     padding: 10,
-    borderRadius: 30,
-    marginTop: 10,
-    width: "50%",
-    shadowColor: "#000", // Shadow color
-    shadowOffset: {
-      width: 1, // Horizontal shadow offset
-      height: 4, // Vertical shadow offset
-    },
-    shadowOpacity: 0.25, // Shadow transparency
-    shadowRadius: 3.84, // Shadow blur radius
-    // Android Elevation
-    elevation: 5,
+    borderRadius: 50,
   },
-  buttonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    textAlign: "center",
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
   },
 });
 
