@@ -28,9 +28,9 @@ export default function SignInScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-    <Text style={styles.title}>Sign in to {"\n"}your account</Text>
-    <Text style={styles.subTitle}>Sign in or create your account</Text>
-    <TextInput
+      <Text style={styles.title}>Sign in to {"\n"}your account</Text>
+      <Text style={styles.subTitle}>Sign in or create your account</Text>
+      <TextInput
         style={styles.input}
         placeholder="Email"
         value={email}
@@ -46,13 +46,18 @@ export default function SignInScreen({ navigation }) {
         onChangeText={setPassword}
         secureTextEntry
       />
-    <View style={styles.body}>
-    <TouchableOpacity style={styles.button} onPress={handleLogin}>
-      <Text style={styles.buttonText}>Login</Text>
-    </TouchableOpacity>
-    <Text style={styles.bottomText}>Don’t have an account? Register</Text>
-    </View>
+      <View style={styles.body}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.linkButton} onPress={() => navigation.navigate("Signup")}
+        >
+          <Text style={styles.bottomText}>
+            Don’t have an account? <Text style={styles.linkText}>Register</Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-  </View>
+    </View>
   );
 }

@@ -68,7 +68,14 @@ const styles = StyleSheet.create({
     padding:10,
     fontWeight: "bold",
     textAlign: "center", // Centered for better alignment
-  }
+  },
+    linkButton: {
+    marginTop: 10,
+  },
+  linkText: {
+    color: "#007BFF", // Link color for "Register"
+    fontWeight: "bold",
+  },
 });
 
 export default styles;

@@ -11,7 +11,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import SignInScreen from "./SignInScreen";
 import EventScreen from './EventScreen'; // Your EventScreen component
-import Forum from './Forum'; 
+import Forum from './Forum';
+import SignUpScreen from "./SignUpScreen";
 
 
 const Tab = createBottomTabNavigator();
@@ -58,7 +59,7 @@ function MainTabs() {
       <Tab.Screen name="Form" component={Form} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
-    
+
   );
 }
 
@@ -78,28 +79,34 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator>
         {/* Show Login screen if not logged in */}
-          <Stack.Screen
-            name="Login"
-            component={SignInScreen}
-            options={{ headerShown: false }}
-          />
+        <Stack.Screen
+          name="Login"
+          component={SignInScreen}
+          options={{ headerShown: false }}
+        />
 
-          <Stack.Screen
-            name="MainTabs"
-            component={MainTabs}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
+        <Stack.Screen
+          name="Signup"
+          component={SignUpScreen}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="MainTabs"
+          component={MainTabs}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="EventScreen"
           component={EventScreen}
-          options={{ title: 'Event Details', headerShown: false  }} // Optionally add a title
+          options={{ title: 'Event Details', headerShown: false }} // Optionally add a title
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Forum"
           component={Forum}
-          options={{ title: 'Forum', headerShown: false  }} // Optionally add a title
+          options={{ title: 'Forum', headerShown: false }} // Optionally add a title
         />
-        
+
       </Stack.Navigator>
     </NavigationContainer>
   );
