@@ -25,7 +25,7 @@ const ProfileSection = ({ title, profiles, users }) => {
           item ? ( // Check if item exists
             <TouchableOpacity 
               style={styles.iconContainer}
-              onPress={() => navigation.navigate('ProfileScreen', { userId: item.id })} // Navigate to ProfileScreen
+              onPress={() => navigation.navigate('ProfileScreen', { Id: item.id })} // Navigate to ProfileScreen
             >
               <Ionicons name="person-circle-outline" size={40} color="#1F3A6E" />
               <Text style={styles.profileName}>{item.username}</Text>
