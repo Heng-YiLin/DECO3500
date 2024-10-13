@@ -7,7 +7,6 @@ import { fetchUserLocations } from "../api/api";
 import axios from "axios";
 
 // Replace with your actual Google Maps API key
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCbSTca7OwBuNVBBbnZVOCginfikMm6_Ks';
 
 const geocodeLocation = async (location) => {
   try {
