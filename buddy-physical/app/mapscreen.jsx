@@ -1,10 +1,77 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Link } from "expo-router";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
+import { fetchUserLocations } from "../.expo/api/api";
 
-const mapscreen = () => {
+const addPinToMap = async (location, geocodeLocation, count) => {
+  try {
+    const coords = await geocodeLocation(location);
+    if (coords) {
+      return { ...coords, location, count };
+    }
+  } catch (error) {
+    console.error('Error adding pin to map:', error);
+  }
+};
+
+// Example usage of the fetchUserLocations function
+const displayUserLocations = async (geocodeLocation) => {
+  try {
+    const userLocations = await fetchUserLocations();
+    console.log('User Locations:', userLocations);
+
+    // Calculate distinct locations and their counts
+    const locationCounts = userLocations.reduce((acc, location) => {
+      acc[location] = (acc[location] || 0) + 1;
+      return acc;
+    }, {});
+
+    return await Promise.all(
+      Object.entries(locationCounts).map(async ([location, count]) =>
+        await addPinToMap(location, geocodeLocation, count)
+      )
+    );
+  } catch (error) {
+    console.error('Error displaying user locations:', error);
+  }
+};
+
+const MapScreen = () => {
+  const [userLocations, setUserLocations] = useState([]);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const locationsWithCoords = await displayUserLocations(geocodeLocation);
+        setUserLocations(locationsWithCoords.filter(coords => coords)); // Remove null values if geocoding failed
+      } catch (error) {
+        console.error("Error fetching user locations:", error);
+      }
+    };
+
+    fetchLocations();
+  }, []);
+
+  const geocodeLocation = async (location) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`
+      );
+      const data = await response.json();
+      if (data.length > 0) {
+        return {
+          latitude: parseFloat(data[0].lat),
+          longitude: parseFloat(data[0].lon),
+        };
+      }
+    } catch (error) {
+      console.error("Error geocoding location:", location, error);
+    }
+    return null;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.parent}>
@@ -14,7 +81,15 @@ const mapscreen = () => {
       </View>
 
       <View style={styles.mapContainer}>
-        <MapView style={styles.map} />
+      <MapView style={styles.map}>
+        {userLocations.map((coords, index) => (
+          <Marker
+            key={index}
+            coordinate={{ latitude: coords.latitude, longitude: coords.longitude }}
+            title={`${coords.location} - ${coords.count} people`}
+          />
+        ))}
+      </MapView>
       </View>
 
       <View style={styles.navigation}>
@@ -61,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 50,
     fontWeight: "bold",
     color: "#407FDC",
-    marginTop:200,
+    marginTop: 200,
   },
   map: {
     width: "100%",
@@ -142,8 +217,8 @@ const styles = StyleSheet.create({
   qrCode: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center", 
+    alignItems: "center",
   },
 });
 
-export default mapscreen;
+export default MapScreen;
