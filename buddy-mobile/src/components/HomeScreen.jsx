@@ -44,7 +44,9 @@ function HomeScreen() {
     async function fetchBuddyUpdates() {
       try {
         const updates = await getBuddyUpdates(); // Fetch buddy updates (users attending events)
-        setBuddyUpdates(updates);
+        // Limit to only 5 updates
+        const limitedUpdates = updates.slice(0, 5); // Slice the array to only take 5 items
+        setBuddyUpdates(limitedUpdates);
       } catch (error) {
         console.error("Error fetching buddy updates:", error);
       }
@@ -110,6 +112,7 @@ function HomeScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
       </View>
     );
   }
@@ -178,7 +181,7 @@ function HomeScreen() {
         <Text style={styles.sectionHeader}>Buddy Updates</Text>
         <View style={styles.buddyUpdates}>
           <FlatList
-            data={buddyUpdates} // Use buddy updates data
+            data={buddyUpdates} // Use only the 5 buddy updates
             keyExtractor={(item) => item.event_id.toString()} // Ensure proper key
             renderItem={renderBuddyUpdate} // Render buddy update cards
           />

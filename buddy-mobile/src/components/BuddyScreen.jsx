@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Ionicons } from "@expo/vector-icons"; // If using Expo for icons
 import styles from "../styles/buddyScreen.style";
 import { Button } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
 import AsyncStorage from "@react-native-async-storage/async-storage"; // Import async storage for retrieving loggedInUser
 import { getBuddies, getAllUsers, getSameCulturalBackgroundUsers, getSameLanguageUsers } from "../api/api"; // Import API calls
 import {
@@ -11,7 +11,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator, // Import to show loading indicator
+  ActivityIndicator,
 } from "react-native";
 
 // Helper function to filter out duplicates
@@ -149,12 +149,14 @@ const BuddyScreen = () => {
     fetchLoggedInUserId();
   }, []);
 
-  // Fetch buddies and users on initial render
-  useEffect(() => {
-    if (loggedInUserId) {
-      fetchBuddiesAndUsers(); // Fetch data when user ID is available
-    }
-  }, [loggedInUserId]);
+  // Automatically fetch buddies and users when the screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      if (loggedInUserId) {
+        fetchBuddiesAndUsers();
+      }
+    }, [loggedInUserId, loggedInUserBackground, loggedInUserLanguages]) // Add dependencies to re-fetch when user ID, background, or languages change
+  );
 
   // Manually refresh all categories when the refresh button is pressed
   const handleRefresh = () => {
@@ -190,10 +192,12 @@ const BuddyScreen = () => {
         {loading && (
           <ActivityIndicator size="large" color="#407FDC" />
         )}
-      {/* Refresh Button */}
-      <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
+
+        {/* Refresh Button */}
+        <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
           <Ionicons name="refresh" size={32} color="#407FDC" />
         </TouchableOpacity>
+
         {/* Your Buddies Section */}
         {!loading && (
           <>

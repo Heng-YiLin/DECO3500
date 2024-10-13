@@ -76,6 +76,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
   },
+  buddyButton: {
+    position: 'absolute', // Fix the button in a specific position
+    bottom: 30, // Move it up from the bottom
+    right: 30, // Move it left from the right
+    backgroundColor: '#C7DAFF', // Light blue background color for visibility
+    paddingVertical: 12, // Add vertical padding to make the button bigger
+    paddingHorizontal: 20, // Add horizontal padding
+    borderRadius: 25, // Make the button rounded
+    elevation: 5, // Add shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
+    shadowOpacity: 0.25, // Shadow opacity for iOS
+    shadowRadius: 4, // Shadow blur radius for iOS
+  },
+  
+  buddyButtonText: {
+    fontSize: 18, // Increase the font size
+    color: '#274766', // Dark blue color for the text
+    fontWeight: '600', // Semi-bold font weight
+    textAlign: 'center', // Center the text
+  },
+  
+  
 });
 
 export default styles;

@@ -10,7 +10,7 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons"; // Importing Ionicons for icons
 import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
 import styles from "../styles/profileScreen.style";
-import { getUserProfile } from "../api/api";
+import { getUserProfile, checkIfUsersAreBuddies, toggleBuddyRequest } from "../api/api";
 
 function ProfileScreen() {
   const route = useRoute();
@@ -19,6 +19,8 @@ function ProfileScreen() {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null); // State to hold the Id (from params or async storage)
   const [loggedInUserId, setLoggedInUserId] = useState(null); // State to hold the logged-in user's ID
+  const [isBuddy, setIsBuddy] = useState(false); // State to track buddy status
+  const [buddyLoading, setBuddyLoading] = useState(false); // To handle loading during buddy request
 
   // Fetch the userId either from route params or AsyncStorage
   useEffect(() => {
@@ -65,6 +67,32 @@ function ProfileScreen() {
 
     fetchUser();
   }, [userId]);
+
+  // Check if the logged-in user and the profile being viewed are buddies
+  useEffect(() => {
+    const checkBuddyStatus = async () => {
+      if (userId && loggedInUserId && userId !== loggedInUserId) {
+        try {
+          const areBuddies = await checkIfUsersAreBuddies(loggedInUserId, userId);
+          setIsBuddy(areBuddies);
+        } catch (error) {
+          console.error("Error checking buddy status:", error);
+        }
+      }
+    };
+
+    checkBuddyStatus();
+  }, [userId, loggedInUserId]);
+
+  // Function to handle requesting or removing a buddy
+  const handleBuddyRequest = async () => {
+    setBuddyLoading(true); // Start the loading indicator for the button
+    const success = await toggleBuddyRequest(loggedInUserId, userId, isBuddy);
+    if (success) {
+      setIsBuddy(!isBuddy); // Toggle the buddy status on success
+    }
+    setBuddyLoading(false); // Stop the loading indicator after the request completes
+  };
 
   // Logout function
   const handleLogout = async () => {
@@ -130,6 +158,19 @@ function ProfileScreen() {
           </Text>
         </View>
       </View>
+
+      {/* Buddy Request Button */}
+      {loggedInUserId !== userId && (
+        <TouchableOpacity
+          onPress={handleBuddyRequest}
+          style={styles.buddyButton}
+          disabled={buddyLoading} // Disable the button when loading
+        >
+          <Text style={styles.buddyButtonText}>
+            {isBuddy ? "Remove Buddy" : "Request Buddy"}
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

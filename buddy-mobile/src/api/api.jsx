@@ -88,6 +88,7 @@ export async function getBuddyUpdates() {
   }
 }
 
+
 // ------------ EVENTS ---------------- //
 export const getEvents = async () => {
   try {
