@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
 import { fetchUserLocations } from "../api/api";
 import axios from "axios";
-
+import { GOOGLE_MAPS_API_KEY } from '@env';
 // Replace with your actual Google Maps API key
 
 const geocodeLocation = async (location) => {
