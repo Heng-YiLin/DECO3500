@@ -8,7 +8,7 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
 import { CalendarProvider, WeekCalendar } from "react-native-calendars";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "../styles/calendarScreen.style";
@@ -27,34 +27,35 @@ const CalendarScreen = () => {
   const [markedDates, setMarkedDates] = useState({}); // Marked dates state
   const [monthLabel, setMonthLabel] = useState(""); // State to hold the month label
 
-  // Fetch categories and distinct events on mount
-  useEffect(() => {
-    async function fetchCategoriesAndDistinctEvents() {
-      try {
-        const fetchedCategories = await getEventCategories(); // Fetch all event categories
-        const distinctCategories = await fetchDistinctEventCategories(); // Fetch distinct categories
-        const allEvents = await getEvents();
+  // Function to fetch categories and distinct events
+  const fetchCategoriesAndDistinctEvents = async () => {
+    try {
+      const fetchedCategories = await getEventCategories(); // Fetch all event categories
+      const distinctCategories = await fetchDistinctEventCategories(); // Fetch distinct categories
+      const allEvents = await getEvents();
 
-        setCategories(fetchedCategories);
-        setAllCategories([...new Set(distinctCategories.map((item) => item.category_name))]);
-        setAllEvents(allEvents);
+      setCategories(fetchedCategories);
+      setAllCategories([...new Set(distinctCategories.map((item) => item.category_name))]);
+      setAllEvents(allEvents);
 
-        // Mark dates with events and add an orange dot
-        const marked = {};
-        allEvents.forEach(event => {
-          console.log("event: ", event);
-          const formattedDate = event.start_date; // Ensure the date is in "YYYY-MM-DD" format
-          console.log("formatted date: ", formattedDate);
-          marked[formattedDate] = { marked: true, dotColor: '#E48022' }; // Orange dot for marked dates
-        });
-        setMarkedDates(marked);
-        console.log("marked dates: ", markedDates);
-      } catch (error) {
-        console.error("Error fetching categories or distinct events:", error);
-      }
+      // Mark dates with events and add an orange dot
+      const marked = {};
+      allEvents.forEach(event => {
+        const formattedDate = event.start_date; // Ensure the date is in "YYYY-MM-DD" format
+        marked[formattedDate] = { marked: true, dotColor: '#E48022' }; // Orange dot for marked dates
+      });
+      setMarkedDates(marked);
+    } catch (error) {
+      console.error("Error fetching categories or distinct events:", error);
     }
-    fetchCategoriesAndDistinctEvents();
-  }, []);
+  };
+
+  // Use useFocusEffect to fetch data when the screen is entered
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchCategoriesAndDistinctEvents();
+    }, [])
+  );
 
   // Fetch events for selected date
   useEffect(() => {

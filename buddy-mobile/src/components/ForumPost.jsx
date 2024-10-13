@@ -119,7 +119,7 @@ function ForumPost() {
       return (
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{item.forum.headline || "No Title"}</Text>
-          <Text style={styles.author}>Posted by {item.forum.name || "Unknown User"}</Text>
+          <Text style={styles.author}>Posted by {item.forum.user_name || "Unknown User"}</Text>
           <Text style={styles.date}>{getDaysAgo(item.forum.created_at)}</Text>
 
           <FlatList

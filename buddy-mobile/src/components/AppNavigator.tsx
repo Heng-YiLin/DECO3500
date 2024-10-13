@@ -15,6 +15,7 @@ import ForumPost from "./ForumPost";
 import SignUpScreen from "./SignUpScreen";
 import ProfileScreen from "./ProfileScreen";
 import AddForumPost from "./AddForumPost";
+import AddEventScreen from "./AddEventScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -111,7 +112,12 @@ export default function AppNavigator() {
         <Stack.Screen
           name="AddForumPost"
           component={AddForumPost}
-          options={{ title: 'Add New Forum' }}  // Customize the header title
+          options={{ title: 'Add New Forum' }} 
+        />
+        <Stack.Screen
+          name="AddEventScreen"
+          component={AddEventScreen}
+          options={{ title: 'Add New Event' }} 
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -115,7 +115,47 @@ export async function getEvent(eventId) {
   }
 }
 
+// ------------ EVENTS ---------------- //
+// Fetch event categories from the backend
+export const getEventCategories = async () => {
+  try {
+    const response = await apiRequest('event_categories', 'GET'); // Adjust the endpoint based on your API structure
+    return response;
+  } catch (error) {
+    console.error('Error fetching event categories:', error);
+    throw error;
+  }
+};
 
+export const fetchDistinctEventCategories = async () => {
+  try {
+    const response = await apiRequest('event_categories?select=category_name');
+    return response; // Return the array of categories
+  } catch (error) {
+    console.error('Error fetching event categories:', error);
+    throw error; // Handle the error
+  }
+};
+
+export const getEventsByDate = async (date) => {
+  try {
+    const response = await apiRequest(`events?start_date=eq.${date}`, "GET"); // Modify the query based on your backend structure
+    return response;
+  } catch (error) {
+    console.error("Error fetching events by date:", error);
+    throw error;
+  }
+};
+
+export const publishEvent = async (eventData) => {
+  try {
+      const response = await apiRequest('events', 'POST', eventData); // Adjust endpoint based on your backend structure
+      return response;
+  } catch (error) {
+      console.error('Error publishing event:', error);
+      throw error;
+  }
+};
 
 // ------------ EVENT RSVP ---------------- //
 export const checkIfUserRSVPed = async (userId, eventId) => {
@@ -308,34 +348,45 @@ export async function postForumComment(postId, userId, commentText) {
   }
 }
 
-// ------------ EVENTS ---------------- //
-// Fetch event categories from the backend
-export const getEventCategories = async () => {
+// Function to add a new forum post
+export const addForumPost = async (headline, description, user_id) => {
   try {
-    const response = await apiRequest('event_categories', 'GET'); // Adjust the endpoint based on your API structure
+    const response = await apiRequest('forum_posts', 'POST', {
+      headline,
+      description,
+      user_id, // You may need to pass the user ID of the logged-in user
+    });
     return response;
   } catch (error) {
-    console.error('Error fetching event categories:', error);
+    console.error("Error adding forum post:", error);
     throw error;
   }
 };
 
-export const fetchDistinctEventCategories = async () => {
+// Function to add categories for a forum post
+export const addForumPostCategory = async (post_id, category_name) => {
   try {
-    const response = await apiRequest('event_categories?select=category_name');
-    return response; // Return the array of categories
-  } catch (error) {
-    console.error('Error fetching event categories:', error);
-    throw error; // Handle the error
-  }
-};
-
-export const getEventsByDate = async (date) => {
-  try {
-    const response = await apiRequest(`events?start_date=eq.${date}`, "GET"); // Modify the query based on your backend structure
+    const response = await apiRequest('forum_post_categories', 'POST', {
+      post_id,
+      category_name,
+    });
     return response;
   } catch (error) {
-    console.error("Error fetching events by date:", error);
+    console.error("Error adding forum post category:", error);
     throw error;
   }
 };
+// Fetch the latest post by a user after creation
+export const getLatestForumPostByUser = async (userId) => {
+  try {
+    const response = await apiRequest(
+      `forum_posts?user_id=eq.${userId}&order=created_at.desc&limit=1`,
+      "GET"
+    );
+    return response[0]; // Return the latest post
+  } catch (error) {
+    console.error("Error fetching the latest forum post:", error);
+    throw error;
+  }
+};
+
