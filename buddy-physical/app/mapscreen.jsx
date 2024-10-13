@@ -1,36 +1,57 @@
-import React, { useEffect, useState, useRef } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Link } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
 import { fetchUserLocations } from "../api/api";
+import axios from "axios";
 
-const addPinToMap = async (location, geocodeLocation, count) => {
+// Replace with your actual Google Maps API key
+const GOOGLE_MAPS_API_KEY = 'AIzaSyCbSTca7OwBuNVBBbnZVOCginfikMm6_Ks';
+
+const geocodeLocation = async (location) => {
   try {
-    const coords = await geocodeLocation(location);
-    if (coords) {
-      return { ...coords, location, count };
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json`,
+      {
+        params: {
+          address: location,
+          key: GOOGLE_MAPS_API_KEY,
+        },
+      }
+    );
+
+    if (response.data.status === "OK") {
+      const { lat, lng } = response.data.results[0].geometry.location;
+      return { latitude: lat, longitude: lng };
+    } else {
+      console.error(`Geocoding error for ${location}:`, response.data.status);
+      return null;
     }
   } catch (error) {
-    console.error('Error adding pin to map:', error);
+    console.error('Error fetching geocode:', error);
+    return null;
   }
 };
 
-// Example usage of the fetchUserLocations function
-const displayUserLocations = async (geocodeLocation) => {
+const addPinToMap = async (location, count) => {
+  const coords = await geocodeLocation(location);
+  if (coords) {
+    return { ...coords, location, count };
+  }
+};
+
+const displayUserLocations = async () => {
   try {
     const userLocations = await fetchUserLocations();
-  //  console.log('User Locations:', userLocations);
-
-    // Calculate distinct locations and their counts
     const locationCounts = userLocations.reduce((acc, location) => {
       acc[location] = (acc[location] || 0) + 1;
       return acc;
     }, {});
 
     return await Promise.all(
-      Object.entries(locationCounts).map(async ([location, count]) =>
-        await addPinToMap(location, geocodeLocation, count)
+      Object.entries(locationCounts).map(async ([location, count]) => 
+        await addPinToMap(location.trim(), count)
       )
     );
   } catch (error) {
@@ -44,8 +65,8 @@ const MapScreen = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const locationsWithCoords = await displayUserLocations(geocodeLocation);
-        setUserLocations(locationsWithCoords.filter(coords => coords)); // Remove null values if geocoding failed
+        const locationsWithCoords = await displayUserLocations();
+        setUserLocations(locationsWithCoords.filter(coords => coords));
       } catch (error) {
         console.error("Error fetching user locations:", error);
       }
@@ -53,24 +74,6 @@ const MapScreen = () => {
 
     fetchLocations();
   }, []);
-
-  const geocodeLocation = async (location) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`
-      );
-      const data = await response.json();
-      if (data.length > 0) {
-        return {
-          latitude: parseFloat(data[0].lat),
-          longitude: parseFloat(data[0].lon),
-        };
-      }
-    } catch (error) {
-     // console.error("Error geocoding location:", location, error);
-    }
-    return null;
-  };
 
   return (
     <View style={styles.container}>
@@ -81,15 +84,15 @@ const MapScreen = () => {
       </View>
 
       <View style={styles.mapContainer}>
-      <MapView style={styles.map}>
-        {userLocations.map((coords, index) => (
-          <Marker
-            key={index}
-            coordinate={{ latitude: coords.latitude, longitude: coords.longitude }}
-            title={`${coords.location} - ${coords.count} people`}
-          />
-        ))}
-      </MapView>
+        <MapView style={styles.map}>
+          {userLocations.map((coords, index) => (
+            <Marker
+              key={index}
+              coordinate={{ latitude: coords.latitude, longitude: coords.longitude }}
+              title={`${coords.location} - ${coords.count} people`}
+            />
+          ))}
+        </MapView>
       </View>
 
       <View style={styles.navigation}>
