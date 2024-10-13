@@ -132,6 +132,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
   },
+  scrollView: {
+    flex: 1,
+    backgroundColor: "#FFF", // Or any other background color
+  },
+  
 });
 
 export default styles;

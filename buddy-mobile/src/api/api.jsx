@@ -54,6 +54,7 @@ export const postUserToDecoUsers = async (userData) => {
       background: userData.background,
       languages: userData.languages,
       interests: userData.interests,
+      location: userData.location,
     });
     console.log('User successfully signed up:', response); // Log the response
     return response;

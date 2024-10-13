@@ -16,6 +16,7 @@ export default function SignUpScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [background, setBackground] = useState("");
+  const [location, setLocation] = useState("");
   const [languages, setLanguages] = useState("");
   const [interests, setInterests] = useState("");
 
@@ -33,6 +34,7 @@ export default function SignUpScreen({ navigation }) {
       background,
       languages,
       interests,
+      location,
     };
 
     try {
@@ -106,6 +108,15 @@ export default function SignUpScreen({ navigation }) {
         placeholder="Background"
         value={background}
         onChangeText={setBackground}
+        autoCapitalize="words"
+        placeholderTextColor="#A9A9A9"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="City of Origin"
+        value={location}
+        onChangeText={setLocation}
         autoCapitalize="words"
         placeholderTextColor="#A9A9A9"
       />
