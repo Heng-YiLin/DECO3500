@@ -94,7 +94,7 @@ const CalendarScreen = () => {
         <Link href="/mapscreen" style={styles.arrowButton}>
           <Ionicons name="chevron-back-outline" size={60} color="#BBD0EF" />
         </Link>
-        <Link href="/" style={styles.arrowButton}>
+        <Link href="/wordcloudscreen" style={styles.arrowButton}>
           <Ionicons name="chevron-forward-outline" size={60} color="#BBD0EF" />
         </Link>
       </View>

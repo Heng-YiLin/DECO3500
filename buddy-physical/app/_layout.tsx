@@ -15,6 +15,10 @@ export default function RootLayout() {
       options={{
         headerShown: false,  // This removes the header for the "index" screen
       }} />
+      <Stack.Screen name="wordcloudscreen"
+      options={{
+        headerShown: false,  // This removes the header for the "index" screen
+      }} />
     </Stack>
   );
 }

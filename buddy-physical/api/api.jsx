@@ -44,22 +44,32 @@ const apiRequest = async (endpoint, method = 'GET', body = null) => {
 
 // API function to fetch all user locations from the deco_users table
 export const fetchUserLocations = async () => {
-    try {
-      // Use the helper function to make an API request to the PostgREST endpoint for fetching all locations
-      const response = await apiRequest('deco_users?select=location&location=not.is.null', 'GET');
-      return response.map(user => user.location);
-    } catch (error) {
-      console.error('Failed to fetch user locations:', error);
-      throw error;
-    }
-  };
-
-  export async function getEvents() {
-    try {
-      const response = await apiRequest('events', 'GET');
-      return response;
-    } catch (error) {
-      console.error('Error fetching events:', error);
-      throw error;
-    }
+  try {
+    // Use the helper function to make an API request to the PostgREST endpoint for fetching all locations
+    const response = await apiRequest('deco_users?select=location&location=not.is.null', 'GET');
+    return response.map(user => user.location);
+  } catch (error) {
+    console.error('Failed to fetch user locations:', error);
+    throw error;
   }
+};
+
+export async function getEvents() {
+  try {
+    const response = await apiRequest('events', 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    throw error;
+  }
+};
+
+export async function getComments() {
+  try {
+    const response = await apiRequest("forum_comments?select=comment_text", "GET");
+    return response;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    throw error;
+  }
+}
