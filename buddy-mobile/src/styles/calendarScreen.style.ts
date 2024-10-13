@@ -9,133 +9,111 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
   },
-  bodyContainer: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 25,
-    paddingTop: 30,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-  },
   header: {
     fontSize: 40,
     fontWeight: "bold",
-    paddingTop: 120,
-    paddingBottom: 70,
-    paddingLeft: 40,
-    width: "100%",
-    marginBottom: -30,
+    paddingTop: 100,
+    paddingBottom: 30,
+    paddingLeft: 20,
   },
-  section: {
-    marginBottom: 20,
-  },
-  sectionHeader: {
+  searchBarContainer: {
+    flexDirection: "row",
+    backgroundColor: "#F3F4F8",
+    borderRadius: 20,
     paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 20,
+    alignItems: "center",
+  },
+  searchBar: {
+    flex: 1,
+    fontSize: 16,
+    color: "#333",
+  },
+  searchIcon: {
+    marginRight: 10,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#274766",
+    marginTop: 10,
   },
-  profiles: {
+  categoriesContainer: {
+    paddingLeft: 20,
     paddingVertical: 10,
-    alignItems: "center", // Center the items in the carousel
+    flexDirection: "row",
   },
-  iconContainer: {
-    justifyContent: 'center', // Center the icon vertically
-    alignItems: 'flex-end', // Align icon to the right
+  categoryButton: {
+    backgroundColor: "#F2F2F7",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginRight: 10,
   },
-  profileName: {
-    marginTop: 5,
-    textAlign: "center",
+  categoryText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#274766",
   },
-
-  button: {
-    backgroundColor: "#C7DAFF",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginVertical: 20,
+  selectedCategoryButton: {
+    backgroundColor: "#407FDC",
   },
-  card: {
-    backgroundColor: "#BBD0EF",
-    padding: 15,
+  selectedCategoryText: {
+    color: "#FFFFFF",
+  },
+  eventCard: {
+    backgroundColor: "#EFF5FC",
+    padding: 20,
     borderRadius: 20,
     marginBottom: 20,
-    shadowColor: "#000", // Shadow color
-    shadowOffset: {
-      width: 1, // Horizontal shadow offset
-      height: 4, // Vertical shadow offset
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.5,
-    elevation: 5,
-    flexDirection: 'row', // Set flex direction to row
-    alignItems: 'center', // Center items vertically
-    justifyContent: 'space-between', 
-  },
-  calendarHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  dayText: {
+  eventImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+  },
+  eventTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#274766",
   },
-  calendarDates: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 10,
+  sectionSub: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 5,
   },
-  dateContainer: {
+  plusIconContainer: {
+    position: "absolute",
+    top: 110, // Align with the header
+    right: 20, // Top-right corner
+    backgroundColor: "#FFFFFF",
     width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.5,
+    elevation: 5,
   },
-  selectedDate: {
-    backgroundColor: "#ccc",
-  },
-  dateText: {
+  monthLabel: {
     fontSize: 16,
-    fontWeight: "bold",
+    color: "#274766",
+    textAlign: "center",
+    marginVertical: 10,
+    fontWeight: "500",
   },
-  eventsContainer: {
-    flex: 1,
-    padding: 20,
-  },
-  event: {
-    flexDirection: "row",
-    paddingVertical: 10,
-  },
-  eventImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  image: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  eventDetails: {
-    flex: 1,
-  },
-  eventTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  eventTime: {
-    fontSize: 14,
-    color: "#666",
-  },
-  eventStatus: {
-    fontSize: 14,
-    color: "#666",
-  },
-  
 });
 
 export default styles;

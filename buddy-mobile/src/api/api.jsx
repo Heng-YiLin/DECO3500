@@ -307,3 +307,35 @@ export async function postForumComment(postId, userId, commentText) {
     throw error;
   }
 }
+
+// ------------ EVENTS ---------------- //
+// Fetch event categories from the backend
+export const getEventCategories = async () => {
+  try {
+    const response = await apiRequest('event_categories', 'GET'); // Adjust the endpoint based on your API structure
+    return response;
+  } catch (error) {
+    console.error('Error fetching event categories:', error);
+    throw error;
+  }
+};
+
+export const fetchDistinctEventCategories = async () => {
+  try {
+    const response = await apiRequest('event_categories?select=category_name');
+    return response; // Return the array of categories
+  } catch (error) {
+    console.error('Error fetching event categories:', error);
+    throw error; // Handle the error
+  }
+};
+
+export const getEventsByDate = async (date) => {
+  try {
+    const response = await apiRequest(`events?start_date=eq.${date}`, "GET"); // Modify the query based on your backend structure
+    return response;
+  } catch (error) {
+    console.error("Error fetching events by date:", error);
+    throw error;
+  }
+};
