@@ -31,6 +31,9 @@ const Index = () => {
       </View>
 
       <View style={styles.navigation}>
+        <Link href="/wordcloudscreen" style={styles.arrowButton}>
+          <Ionicons name="chevron-back-outline" size={60} color="#BBD0EF" />
+        </Link>
         <Link href="/mapscreen" style={styles.arrowButton}>
           <Ionicons name="chevron-forward-outline" size={60} color="#BBD0EF" />
         </Link>
@@ -80,16 +83,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     position: "absolute",
     top: "50%",
-    right: 0,
+    left: 0,
+    right: 0, // Ensures the buttons are on both sides
+    paddingHorizontal: 20, // Padding for spacing
   },
   arrowButton: {
-    backgroundColor: "#FFFFFF",
-    width: 100,
-    height: 100,
-    borderRadius: 25,
+    borderRadius: 50, // Changed to make it round
     alignItems: "center",
     justifyContent: "center",
-    alignSelf: "center",
   },
   bottom: {
     alignItems: "center",
