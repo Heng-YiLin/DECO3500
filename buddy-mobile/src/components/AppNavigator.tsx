@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./HomeScreen";
 import Profile from "./ProfileScreen";
-import Form from "./FormScreen";
+import Forum from "./ForumScreen";
 import Buddy from "./BuddyScreen";
 import Calendar from "./CalendarScreen";
 import { Text } from "react-native";
@@ -11,9 +11,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import SignInScreen from "./SignInScreen";
 import EventScreen from "./EventScreen"; // Your EventScreen component
-import Forum from "./Forum";
+import ForumPost from "./ForumPost";
 import SignUpScreen from "./SignUpScreen";
 import ProfileScreen from "./ProfileScreen";
+import AddForumPost from "./AddForumPost";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -32,7 +33,7 @@ function MainTabs() {
             iconName = focused ? "person" : "person-outline";
           } else if (route.name === "Calendar") {
             iconName = focused ? "calendar" : "calendar-outline";
-          } else if (route.name === "Form") {
+          } else if (route.name === "Forum") {
             iconName = focused ? "chatbox-outline" : "chatbox-outline";
           } else if (route.name === "Buddy") {
             iconName = focused ? "people" : "people-outline";
@@ -54,7 +55,7 @@ function MainTabs() {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Calendar" component={Calendar} />
       <Tab.Screen name="Buddy" component={Buddy} />
-      <Tab.Screen name="Form" component={Form} />
+      <Tab.Screen name="Forum" component={Forum} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
@@ -87,7 +88,6 @@ export default function AppNavigator() {
           component={SignUpScreen}
           options={{ headerShown: false }}
         />
-
         <Stack.Screen
           name="MainTabs"
           component={MainTabs}
@@ -99,14 +99,19 @@ export default function AppNavigator() {
           options={{ title: "Event Details", headerShown: false }} // Optionally add a title
         />
         <Stack.Screen
-          name="Forum"
-          component={Forum}
-          options={{ title: "Forum", headerShown: false }} // Optionally add a title
+          name="ForumPost"
+          component={ForumPost}
+          options={{ title: "ForumPost", headerShown: false }} // Optionally add a title
         />
         <Stack.Screen
           name="ProfileScreen"
           component={ProfileScreen}
           options={{ title: "ProfileScreen", headerShown: false }} // Optionally add a title
+        />
+        <Stack.Screen
+          name="AddForumPost"
+          component={AddForumPost}
+          options={{ title: 'Add New Forum' }}  // Customize the header title
         />
       </Stack.Navigator>
     </NavigationContainer>

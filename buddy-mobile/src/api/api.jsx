@@ -26,6 +26,9 @@ const apiRequest = async (endpoint, method = 'GET', body = null) => {
     const response = await fetch(`${API_URL}${endpoint}`, options);
     const responseBody = await response.text();
 
+    // Log the entire response body for debugging purposes
+    console.log(`Response from ${method} request to ${endpoint}:`, responseBody);
+
     if (!response.ok) {
       console.error(`Error response from ${method} request to ${endpoint}:`, responseBody); // Log error response body
       throw new Error(`Error API Call Failed: ${response.status}: ${response.statusText}`);
@@ -38,6 +41,7 @@ const apiRequest = async (endpoint, method = 'GET', body = null) => {
     throw error;
   }
 };
+
 
 // ------------ SIGNUP/SIGNIN ---------------- //
 export const postUserToDecoUsers = async (userData) => {
@@ -223,3 +227,82 @@ export const toggleBuddyRequest = async (user1_id, user2_id, isBuddy) => {
     return false;
   }
 };
+
+// ------------ FORUM ---------------- //
+// Fetch all forum posts along with their associated categories and comment counts
+export async function fetchAllForumPosts() {
+  try {
+    const response = await apiRequest(
+      `forum_posts_with_categories_and_comments`
+    );
+    return response; // Return all forum posts from the view
+  } catch (error) {
+    console.error("Error fetching forum posts:", error);
+    return [];
+  }
+}
+
+// Fetch all categories to connect with each forum post card
+export const fetchAllCategories = async () => {
+  try {
+    const response = await apiRequest('forum_post_categories');
+    return response; // Return the array of categories
+  } catch (error) {
+    console.error('Error fetching forum categories:', error);
+    throw error; // Handle the error
+  }
+};
+
+
+// Fetch unique categories from the forum_post_categories table
+export const fetchDistinctCategories = async () => {
+  try {
+    const response = await apiRequest('forum_post_categories?select=category_name');
+    return response; // Return the array of categories
+  } catch (error) {
+    console.error('Error fetching forum categories:', error);
+    throw error; // Handle the error
+  }
+};
+
+export async function fetchForumPost(forumId) {
+  try {
+    const response = await apiRequest(
+      `forum_posts_with_categories_and_comments?id=eq.${forumId}`
+    );
+    console.log("forum post: ", response[0]);
+    return response[0]; // Return the first forum post (assuming it's unique by ID)
+  } catch (error) {
+    console.error("Error fetching forum post:", error);
+    return null;
+  }
+}
+
+export async function fetchReplies(forumId) {
+  try {
+    const response = await apiRequest(
+      `forum_comments_with_user?post_id=eq.${forumId}`
+    );
+    console.log("comments response: ", response);
+    return response; // Return all replies with user details for the forum post
+  } catch (error) {
+    console.error("Error fetching forum replies:", error);
+    return [];
+  }
+}
+
+export async function postForumComment(postId, userId, commentText) {
+  try {
+    // Use the apiRequest function to send a POST request
+    const response = await apiRequest('forum_comments', 'POST', {
+      post_id: postId,       // Correctly pass the post ID
+      user_id: userId,       // Correctly pass the user ID
+      comment_text: commentText,  // Correctly pass the comment text
+    });
+
+    return response; // Return the result of the POST request
+  } catch (error) {
+    console.error('Error posting forum comment:', error);
+    throw error;
+  }
+}
