@@ -13,6 +13,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage for user data retrieval
 import { getEvents, getBuddyUpdates } from "../api/api"; // Import getEvents and getBuddyUpdates functions
+import { LogBox } from 'react-native';
+
+// Ignore all log notifications:
+LogBox.ignoreAllLogs(true);
+
 
 function HomeScreen() {
   const navigation = useNavigation();
