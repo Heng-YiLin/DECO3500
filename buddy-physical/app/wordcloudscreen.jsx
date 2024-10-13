@@ -4,6 +4,10 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Link } from "expo-router";
 import WordCloud from "rn-wordcloud";
 import { getComments } from "../api/api";
+import { LogBox } from 'react-native';
+
+// Ignore all log notifications:
+LogBox.ignoreAllLogs(true);
 
 const WordCloudScreen = () => {
   const [wordData, setWordData] = useState([]);
