@@ -22,12 +22,12 @@ const apiRequest = async (endpoint, method = 'GET', body = null) => {
   }
 
   try {
-    console.log(`Sending ${method} request to ${API_URL}${endpoint} with body:`, body); // Log request details
+   // ${method} request to ${API_URL}${endpoint} with body:`, body); // Log request details
     const response = await fetch(`${API_URL}${endpoint}`, options);
     const responseBody = await response.text();
 
     // Log the entire response body for debugging purposes
-    console.log(`Response from ${method} request to ${endpoint}:`, responseBody);
+   // console.log(`Response from ${method} request to ${endpoint}:`, responseBody);
 
     if (!response.ok) {
       console.error(`Error response from ${method} request to ${endpoint}:`, responseBody); // Log error response body

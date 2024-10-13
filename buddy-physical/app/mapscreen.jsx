@@ -20,7 +20,7 @@ const addPinToMap = async (location, geocodeLocation, count) => {
 const displayUserLocations = async (geocodeLocation) => {
   try {
     const userLocations = await fetchUserLocations();
-    console.log('User Locations:', userLocations);
+  //  console.log('User Locations:', userLocations);
 
     // Calculate distinct locations and their counts
     const locationCounts = userLocations.reduce((acc, location) => {
@@ -67,7 +67,7 @@ const MapScreen = () => {
         };
       }
     } catch (error) {
-      console.error("Error geocoding location:", location, error);
+     // console.error("Error geocoding location:", location, error);
     }
     return null;
   };

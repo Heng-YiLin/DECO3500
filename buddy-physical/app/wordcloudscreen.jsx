@@ -1,9 +1,8 @@
-// Import necessary dependencies
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Link } from "expo-router";
-import WordCloud from "react-d3-cloud"; // Import the WordCloud component from react-d3-cloud
+import WordCloud from "rn-wordcloud";
 import { getComments } from "../api/api";
 
 const WordCloudScreen = () => {
@@ -12,31 +11,44 @@ const WordCloudScreen = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        // Fetch all comments from the API endpoint
         const response = await getComments();
-        const comments = response.map(comment => comment.comment_text);
+        if (response.length === 0) {
+          setWordData([]);
+          console.log("No comments found.");
+          return;
+        }
 
-        // Count word frequency
-        const wordCount = comments.join(" ")
-          .split(/\s+/)
-          .reduce((acc, word) => {
-            const sanitizedWord = word.toLowerCase().replace(/[^a-zA-Z0-9]/g, "");
-            if (sanitizedWord) {
-              acc[sanitizedWord] = (acc[sanitizedWord] || 0) + 1;
-            }
-            return acc;
-          }, {});
+        const comments = response.map((comment) => comment.comment_text);
+        const wordCount = countWords(comments);
+        const wordDataFormatted = formatWordData(wordCount);
 
-        // Format word data for the word cloud
-        const wordDataFormatted = Object.keys(wordCount).map(word => ({
-          text: word,
-          value: wordCount[word],
-        }));
-
+        // Set the formatted word data to state
         setWordData(wordDataFormatted);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
+    };
+
+    const countWords = (comments) => {
+      return comments
+        .join(" ")
+        .split(/\s+/)
+        .reduce((acc, word) => {
+          const sanitizedWord = word.toLowerCase().replace(/[^a-zA-Z0-9]/g, "");
+          if (sanitizedWord) {
+            acc[sanitizedWord] = (acc[sanitizedWord] || 0) + 1;
+          }
+          return acc;
+        }, {});
+    };
+
+    const formatWordData = (wordCount) => {
+      return Object.keys(wordCount)
+      .filter(word => word.length > 3) // Filter out words with 1 or 2 characters
+      .map(word => ({
+        text: word,
+        value: wordCount[word],
+      }));
     };
 
     fetchComments();
@@ -49,18 +61,20 @@ const WordCloudScreen = () => {
           <Text style={styles.headerText}>Forum Word Cloud</Text>
         </View>
       </View>
-
       <View style={styles.wordCloudContainer}>
-        {wordData.length > 0 ? (
+        {wordData.length > 0 && (
           <WordCloud
-            data={wordData}
-            fontSizeMapper={(word) => Math.log2(word.value) * 5}
-            rotate={(word) => word.value % 360}
-            width={400}
-            height={400}
+            options={{
+              words: wordData,
+              verticalEnabled: true,
+              minFont: 20,
+              maxFont: 100,
+              fontOffset: 1,
+              width: 800,
+              height: 400,
+              fontFamily: "Arial",
+            }}
           />
-        ) : (
-          <Text>Loading word cloud...</Text>
         )}
       </View>
 
@@ -127,7 +141,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 50,
+    marginTop: 200,
   },
   navigation: {
     flexDirection: "row",
@@ -144,11 +158,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   bottombar: {
-    flexDirection: "row", // Align children in a row
-    justifyContent: "space-between", // Space between logo and QR code
-    alignItems: "center", // Center vertically
-    paddingHorizontal: 20, // Add horizontal padding
-    paddingVertical: 20, // Add some bottom padding if needed
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     paddingTop: 50,
   },
   logoContainer: {
