@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Link } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
-import { fetchUserLocations } from "../.expo/api/api";
+import { fetchUserLocations } from "../api/api";
 
 const addPinToMap = async (location, geocodeLocation, count) => {
   try {

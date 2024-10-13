@@ -1,15 +1,59 @@
-import React, { useState } from "react";
+// Import necessary dependencies
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Link } from "expo-router";
-import { CalendarProvider, Agenda } from "react-native-calendars"; // Import Agenda from react-native-calendars
+import { CalendarProvider, Agenda } from "react-native-calendars";
+import { getEvents } from "../api/api";
 
-const mapscreen = () => {
-  const [items, setItems] = useState({
-    "2024-10-10": [{ name: "Event 1", height: 50 }],
-    "2024-10-11": [{ name: "Event 2", height: 50 }],
-    "2024-10-12": [{ name: "Event 3", height: 50 }],
-  });
+const CalendarScreen = () => {
+  const [items, setItems] = useState({});
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        // Fetch all events from the API endpoint
+        const response = await getEvents();
+        
+        // Format the data to match the requirements of the Agenda component
+        const formattedEvents = response.reduce((acc, event) => {
+          const dateKey = event.start_date;
+          const eventTime = `${event.start_time.substring(0, 5)} - ${event.end_time ? event.end_time.substring(0, 5) : ""}`;
+          const eventItem = {
+            name: event.name,
+            location: event.location,
+            time: eventTime,
+            height: 50,
+          };
+          if (!acc[dateKey]) {
+            acc[dateKey] = [];
+          }
+          acc[dateKey].push(eventItem);
+          return acc;
+        }, {});
+
+        setItems(formattedEvents);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  const handleDayPress = (day) => {
+    if (!items[day.dateString] || items[day.dateString].length === 0) {
+      const nextEvents = Object.keys(items)
+        .filter((key) => key >= day.dateString && items[key].length > 0)
+        .sort()
+        .slice(0, 3) // Get the next few events after the date
+        .reduce((acc, key) => {
+          acc[key] = items[key];
+          return acc;
+        }, {});
+      setItems((prevItems) => ({ ...prevItems, ...nextEvents }));
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -19,14 +63,16 @@ const mapscreen = () => {
         </View>
       </View>
 
-      <CalendarProvider date={new Date().toISOString().split("T")[0]}>
+      <CalendarProvider date={new Date().toISOString().split("T")[0]} onDateChanged={handleDayPress}>
         <View style={styles.agendaContainer}>
           <Agenda
             items={items}
             selected={new Date().toISOString().split("T")[0]} // Default selected date is today
             renderItem={(item, firstItemInDay) => (
               <View style={[styles.item, { height: item.height }]}>
-                <Text>{item.name}</Text>
+                <Text style={styles.eventTitle}>{item.name}</Text>
+                <Text style={styles.eventLocation}>{item.location}</Text>
+                <Text style={styles.eventTime}>{item.time}</Text>
               </View>
             )}
             renderEmptyDate={() => (
@@ -37,8 +83,8 @@ const mapscreen = () => {
             rowHasChanged={(r1, r2) => r1.name !== r2.name}
             style={styles.agenda}
             theme={{
-              agendaTodayColor: '#407FDC',
-              agendaKnobColor: '#BBD0EF',
+              agendaTodayColor: "#407FDC",
+              agendaKnobColor: "#BBD0EF",
             }}
           />
         </View>
@@ -82,8 +128,7 @@ const styles = StyleSheet.create({
   },
   agendaContainer: {
     height: 500, // Adjust this to make the agenda smaller
-    marginTop:400,
-
+    marginTop: 400,
   },
   headerText: {
     fontSize: 50,
@@ -97,6 +142,18 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     marginTop: 17,
+  },
+  eventTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  eventLocation: {
+    fontSize: 16,
+    color: "#888",
+  },
+  eventTime: {
+    fontSize: 14,
+    color: "#444",
   },
   emptyDate: {
     height: 50,
@@ -126,17 +183,17 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   logoContainer: {
-    flex: 1, // Allows the logo container to take up space
-    alignItems: "center", // Center the logo within its container
+    flex: 1,
+    alignItems: "center",
   },
   headerImg: {
-    width: 100, // Set desired width for logo
-    height: 100, // Set desired height for logo
+    width: 100,
+    height: 100,
   },
   qrCodeImage: {
-    width: 80, // Set desired width for QR code
-    height: 80, // Set desired height for QR code
-    marginBottom: 10, // Add margin below QR code
+    width: 80,
+    height: 80,
+    marginBottom: 10,
   },
   text: {
     textAlign: "center",
@@ -164,9 +221,8 @@ const styles = StyleSheet.create({
   qrCode: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center", 
+    alignItems: "center",
   },
-
 });
 
-export default mapscreen;
+export default CalendarScreen;
