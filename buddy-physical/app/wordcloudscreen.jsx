@@ -48,11 +48,13 @@ const WordCloudScreen = () => {
 
     const formatWordData = (wordCount) => {
       return Object.keys(wordCount)
-      .filter(word => word.length > 3) // Filter out words with 1 or 2 characters
-      .map(word => ({
-        text: word,
-        value: wordCount[word],
-      }));
+        .filter(word => word.length > 3) // Filter out words with 1, 2, or 3 characters
+        .map(word => ({
+          text: word,
+          value: wordCount[word],
+        }))
+        .sort((a, b) => b.value - a.value) // Sort by word count in descending order
+        .slice(0, 30); // Take the top 20
     };
 
     fetchComments();
@@ -72,7 +74,7 @@ const WordCloudScreen = () => {
               words: wordData,
               verticalEnabled: true,
               minFont: 20,
-              maxFont: 100,
+              maxFont: 80,
               fontOffset: 1,
               width: 800,
               height: 400,
