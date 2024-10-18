@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
+  console.log("Index component rendered");
   return (
     <Stack>
       <Stack.Screen name="index"

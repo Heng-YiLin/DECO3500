@@ -10,8 +10,11 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Link } from "expo-router";
 
 const Index = () => {
-  return (
+  
+  return ( 
+
     <View style={styles.container}>
+      
       <View style={styles.parent}>
         <View style={styles.child}>
           <Image
