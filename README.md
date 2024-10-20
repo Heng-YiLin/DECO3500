@@ -54,6 +54,8 @@
     npx expo start
     ```
 
+## Login and Credentials 
+- Users can create their own account
 ---
 
 For further documentation, refer to the [Wiki](https://github.com/Heng-YiLin/DECO3500/wiki).
